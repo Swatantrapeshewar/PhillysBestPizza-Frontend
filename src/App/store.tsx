@@ -1,9 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit"
 import { ThunkAction } from "redux-thunk"
+import userReducer from '../Services/Reducers/UserReducer'
 
 const store = configureStore({
     reducer: {
-
+      user: userReducer
     },
   });
 

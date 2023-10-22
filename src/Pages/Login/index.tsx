@@ -1,5 +1,4 @@
-import React from "react";
-import Avatar from '@mui/material/Avatar';
+import React, { useState } from "react";
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -11,14 +10,64 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { userLogin } from '../../Services/Reducers/UserReducer';
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from "../../App/store";
+import { isAPIActionRejected } from "../../Utils/helper";
 
+const isEmailValid = (email: string) => {
+  const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+  return emailRegex.test(email);
+};
+
+const isPasswordValid = (password: string) => {
+  const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  return passwordRegex.test(password);
+};
+ 
 const Login = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch<AppDispatch>();
     const defaultTheme = createTheme();
 
-    const handleSubmit = () => {
+    const [formData, setFormData] = useState({ email: '', password: '' });
 
+    const handleChange = (e:any) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSubmit = async(e:any) => {
+      e.preventDefault();
+      
+      const { email, password } = formData;
+
+      if (!email || !password) {
+        toast.error('Please fill in all fields');
+        return;
+      }
+    
+      if (!isEmailValid(email)) {
+        toast.error('Please enter a valid email address');
+        return;
+      }
+    
+      if (!isPasswordValid(password)) {
+        toast.error('Password must be at least 8 characters and contain at least one Uperrcase, one Lowercase, one number and one Special Character');
+        return;
+      }
+
+      const requestBody = {
+        email,
+        password,
+      }
+
+      const result = await dispatch(userLogin(requestBody))
+      if(!isAPIActionRejected(result.type)){
+        navigate('/')
+      }
     }
 
     return (
@@ -49,6 +98,8 @@ const Login = () => {
                 placeholder="Email"
                 name="email"
                 autoComplete="email"
+                value={formData.email}
+                onChange={handleChange}
                 autoFocus
                 sx={{
                     backgroundColor: '#ededed',
@@ -81,6 +132,8 @@ const Login = () => {
                 id="password"
                 placeholder="Password"
                 autoComplete="current-password"
+                value={formData.password}
+                onChange={handleChange}
                 sx={{
                     backgroundColor: '#ededed',
                     borderRadius: "31.5px",
