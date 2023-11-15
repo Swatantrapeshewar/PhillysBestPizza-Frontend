@@ -73,7 +73,7 @@ const AppBar = styled(MuiAppBar, {
 		easing: theme.transitions.easing.sharp,
 		duration: theme.transitions.duration.leavingScreen,
 	}),
-	...(Boolean(open) && {
+	...((open ?? false) && {
 		marginLeft: drawerWidth,
 		width: `calc(100% - ${drawerWidth}px)`,
 		transition: theme.transitions.create(['width', 'margin'], {
@@ -90,11 +90,11 @@ const Drawer = styled(MuiDrawer, {
 	flexShrink: 0,
 	whiteSpace: 'nowrap',
 	boxSizing: 'border-box',
-	...(Boolean(open) && {
+	...(open === true && {
 		...openedMixin(theme),
 		'& .MuiDrawer-paper': openedMixin(theme),
 	}),
-	...(!(open !== null) && {
+	...(!(open ?? false) && {
 		...closedMixin(theme),
 		'& .MuiDrawer-paper': closedMixin(theme),
 	}),

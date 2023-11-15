@@ -1,0 +1,10 @@
+// General
+@import './general/mixins';
+
+// Pages
+@import './pages/dashboard.scss';
+
+.grey-input {
+	background-color: #ededed;
+	border: red;
+}
