@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '../../Hooks/reduxHooks';
 import { logout } from '../../Services/Reducers/UserReducer';
@@ -28,6 +28,13 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
+import { Container, Grid, Paper } from '@mui/material';
+import { Copyright } from '@mui/icons-material';
+// import Orders from './orders';
+import ItemsCharts from './chart';
+import ManageInventory from './ManageInventory';
+import ManageItem from './ManageItem';
+import InviteUser from './InviteUser';
 
 const drawerWidth = 240;
 
@@ -107,6 +114,7 @@ const Dashboard = (): React.JSX.Element => {
 
 	const theme = useTheme();
 	const [open, setOpen] = React.useState(false);
+	const [activePage, setActivePage] = useState('Dashboard');
 
 	const handleDrawerOpen = (): void => {
 		setOpen(true);
@@ -132,6 +140,10 @@ const Dashboard = (): React.JSX.Element => {
 	const handleLogout = (): void => {
 		dispatch(logout());
 		navigate('/login');
+	};
+
+	const handleActivePage = (type: string): void => {
+		setActivePage(type);
 	};
 
 	return (
@@ -174,15 +186,18 @@ const Dashboard = (): React.JSX.Element => {
 						{[
 							'Dashboard',
 							'Inventory Management',
+							'Manage Items',
 							'Invite Users',
-							'Manage Category',
-							'Manage Branch',
 							'Profile',
+							'Manage Branch',
 						].map((text, index) => (
 							<ListItem
 								key={text}
 								disablePadding
-								sx={{ display: 'block' }}>
+								sx={{ display: 'block' }}
+								onClick={() => {
+									handleActivePage(text);
+								}}>
 								<ListItemButton
 									sx={{
 										minHeight: 48,
@@ -250,7 +265,111 @@ const Dashboard = (): React.JSX.Element => {
 				</Drawer>
 				<Box component="main" sx={{ flexGrow: 1, p: 3 }}>
 					<DrawerHeader />
-					<Typography paragraph>Dashboard</Typography>
+
+					{activePage === 'Dashboard' ? (
+						<Box
+							sx={{
+								minHeight: 1,
+								display: 'flex',
+								flexDirection: { xs: 'column', lg: 'row' },
+							}}>
+							<Box
+								component="main"
+								sx={{
+									flexGrow: 1,
+									minHeight: 1,
+									display: 'flex',
+									flexDirection: 'column',
+								}}>
+								<Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+									<Grid container spacing={3}>
+										{/* Chart */}
+										<Grid item xs={12} md={4} lg={3}>
+											<Paper
+												sx={{
+													p: 2,
+													display: 'flex',
+													flexDirection: 'column',
+													height: 240,
+												}}>
+												<React.Fragment>
+													<Typography
+														component="h2"
+														variant="h6"
+														color="primary"
+														gutterBottom>
+														Quantity in hand
+													</Typography>
+													<Typography
+														component="p"
+														variant="h4">
+														868
+													</Typography>
+													{/* <Typography
+								color="text.secondary"
+								sx={{ flex: 1 }}>
+								Quantity in hand
+							</Typography> */}
+												</React.Fragment>
+											</Paper>
+										</Grid>
+										{/* Recent Deposits */}
+										<Grid item xs={12} md={4} lg={3}>
+											<Paper
+												sx={{
+													p: 2,
+													display: 'flex',
+													flexDirection: 'column',
+													height: 240,
+												}}>
+												<React.Fragment>
+													<Typography
+														component="h2"
+														variant="h6"
+														color="primary"
+														gutterBottom>
+														Quantity received this
+														month
+													</Typography>
+													<Typography
+														component="p"
+														variant="h4">
+														200
+													</Typography>
+													{/* <Typography
+								color="text.secondary"
+								sx={{ flex: 1 }}>
+								Quantity received this month
+							</Typography> */}
+												</React.Fragment>
+											</Paper>
+										</Grid>
+										{/* Recent Orders */}
+										<Grid item xs={12}>
+											<Paper
+												sx={{
+													p: 2,
+													display: 'flex',
+													flexDirection: 'column',
+												}}>
+												{/* <Orders /> */}
+												<ItemsCharts />
+											</Paper>
+										</Grid>
+									</Grid>
+									<Copyright sx={{ pt: 4 }} />
+								</Container>
+							</Box>
+						</Box>
+					) : activePage === 'Inventory Management' ? (
+						<ManageInventory />
+					) : activePage === 'Manage Items' ? (
+						<ManageItem />
+					) : activePage === 'Invite Users' ? (
+						<InviteUser />
+					) : (
+						<h1>Work In progress</h1>
+					)}
 				</Box>
 			</Box>
 		</>
