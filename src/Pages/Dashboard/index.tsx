@@ -31,6 +31,7 @@ const Dashboard = (): React.JSX.Element => {
 					minHeight: 1,
 					display: 'flex',
 					flexDirection: { xs: 'column', lg: 'row' },
+					background: '#EDEDED',
 				}}>
 				<Box
 					component="main"

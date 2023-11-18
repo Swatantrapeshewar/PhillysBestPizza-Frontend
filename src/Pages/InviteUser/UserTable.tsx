@@ -7,7 +7,6 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import { Typography } from '@mui/material';
 
 interface Column {
 	id: 'firstName' | 'lastName' | 'email' | 'role' | 'branch' | 'action';
@@ -83,13 +82,17 @@ export default function StickyHeadTable(): React.JSX.Element {
 
 	return (
 		<>
-			<Typography variant="h3" component="h3">
-				Invite User
-			</Typography>
-
-			<Paper sx={{ width: '100%', overflow: 'hidden' }}>
+			<Paper
+				sx={{
+					width: '100%',
+					overflow: 'hidden',
+					boxShadow: 'none',
+					borderRadius: '0',
+				}}>
 				<TableContainer sx={{ maxHeight: 440 }}>
-					<Table stickyHeader aria-label="sticky table">
+					<Table
+						aria-label="sticky table"
+						sx={{ background: '#fff' }}>
 						<TableHead>
 							<TableRow>
 								{columns.map((column) => (

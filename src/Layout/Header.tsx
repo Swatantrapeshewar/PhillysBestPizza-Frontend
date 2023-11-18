@@ -45,7 +45,10 @@ const Header: React.FC<HeaderProps> = (props) => {
 	};
 
 	return (
-		<AppBar position="fixed" open={open} sx={{ bgcolor: '#fff' }}>
+		<AppBar
+			position="fixed"
+			open={open}
+			sx={{ bgcolor: '#fff', boxShadow: 'none' }}>
 			<Toolbar>
 				<IconButton
 					color="inherit"
@@ -55,7 +58,7 @@ const Header: React.FC<HeaderProps> = (props) => {
 					sx={{
 						marginRight: 5,
 						// ...(open && { display: 'none' }),
-						color: '#87a878',
+						color: '#DC442E',
 					}}>
 					<MenuIcon />
 				</IconButton>

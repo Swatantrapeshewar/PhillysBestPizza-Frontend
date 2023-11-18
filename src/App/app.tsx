@@ -5,6 +5,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import { CssBaseline, StyledEngineProvider } from '@mui/material';
 
 import '../Styles/SCSS/main.scss';
+import 'react-toastify/dist/ReactToastify.css';
 
 import theme from '../Styles/Theme';
 

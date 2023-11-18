@@ -8,11 +8,9 @@ import {
 	ListItemText,
 } from '@mui/material';
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { styled, useTheme } from '@mui/material/styles';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 
 // Hooks
 import { useAppDispatch } from '../Hooks/reduxHooks';
@@ -22,6 +20,45 @@ import { logout } from '../Services/Reducers/UserReducer';
 
 // Assets
 import phillyLogo from '../Assets/Images/Phillys_Logo.png';
+import DashboardIcon from '../Assets/Icons/DashboardIcon';
+import ManageItemsIcon from '../Assets/Icons/ManageItems';
+import InviteUserIcon from '../Assets/Icons/InviteUserIcon';
+import ProfileIcon from '../Assets/Icons/ProfileIcon';
+import BranchIcon from '../Assets/Icons/BranchIcon';
+import LogoutIcon from '../Assets/Icons/LogoutIcon';
+
+interface SidebarRoutesDetails {
+	name: string;
+	icon: React.JSX.Element;
+	route: string;
+}
+const sideBarMenuItems: SidebarRoutesDetails[] = [
+	{
+		name: 'Dashboard',
+		icon: <DashboardIcon />,
+		route: '/',
+	},
+	{
+		name: 'Manage Items',
+		icon: <ManageItemsIcon />,
+		route: '/manage-item',
+	},
+	{
+		name: 'Invite Users',
+		icon: <InviteUserIcon />,
+		route: '/invite-user',
+	},
+	{
+		name: 'Profile',
+		icon: <ProfileIcon />,
+		route: '/profile',
+	},
+	{
+		name: 'Manage Stores',
+		icon: <BranchIcon />,
+		route: '/manage-branch',
+	},
+];
 
 interface SidebarProps {
 	open: boolean;
@@ -40,12 +77,14 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 const Sidebar: React.FC<SidebarProps> = (props) => {
 	const navigate = useNavigate();
 	const dispatch = useAppDispatch();
+	const location = useLocation();
 	const theme = useTheme();
 
-	const { open, handleOpen } = props;
+	const { pathname } = location;
+	const { open } = props;
 
-	const handleDrawerClose = (): void => {
-		handleOpen(false);
+	const handleDrawerClick = (): void => {
+		navigate('/');
 	};
 
 	const handleLogout = (): void => {
@@ -53,43 +92,36 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
 		navigate('/login');
 	};
 
-	const handleActivePage = (type: string): void => {};
-
 	return (
 		<Drawer
 			variant="permanent"
 			open={open}
-			className={!open ? 'main-drawer' : ''}
-			// sx={{ width: !open ? '5%' : '', overflow: !open ? 'hidden' : '' }}
-		>
+			className={!open ? 'main-drawer-closed' : 'main-drawer-open'}
+			sx={{ borderRight: 'none' }}>
 			<DrawerHeader sx={{ justifyContent: 'center' }}>
-				<IconButton onClick={handleDrawerClose}>
+				<IconButton onClick={handleDrawerClick}>
 					{theme.direction === 'rtl' ? (
 						<ChevronRightIcon />
 					) : (
-						<>
-							<img src={phillyLogo} width="150" />
-							{/* <ChevronLeftIcon /> */}
-						</>
+						<img src={phillyLogo} width="150" />
 					)}
 				</IconButton>
 			</DrawerHeader>
-			{/* <Divider /> */}
+
 			<List>
-				{[
-					'Dashboard',
-					'Inventory Management',
-					'Manage Items',
-					'Invite Users',
-					'Profile',
-					'Manage Branch',
-				].map((text, index) => (
+				{sideBarMenuItems.map((sidebarItem) => (
 					<ListItem
-						key={text}
+						key={sidebarItem.name}
 						disablePadding
-						sx={{ display: 'block' }}
+						sx={{
+							display: 'block',
+							color:
+								sidebarItem.route === pathname
+									? '#DC442E'
+									: '#5C5C5C',
+						}}
 						onClick={() => {
-							handleActivePage(text);
+							navigate(sidebarItem.route);
 						}}>
 						<ListItemButton
 							sx={{
@@ -102,21 +134,23 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
 									minWidth: 0,
 									mr: open ? 3 : 'auto',
 									justifyContent: 'center',
+									stroke:
+										sidebarItem.route === pathname
+											? '#DC442E'
+											: '#5C5C5C',
 								}}>
-								{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+								{sidebarItem.icon}
 							</ListItemIcon>
 							{open && (
 								<ListItemText
-									primary={text}
+									primary={sidebarItem.name}
 									sx={{ opacity: open ? 1 : 0 }}
 								/>
 							)}
 						</ListItemButton>
 					</ListItem>
 				))}
-			</List>
-			{/* <Divider /> */}
-			<List>
+
 				<ListItem
 					key="Logout"
 					disablePadding
@@ -134,7 +168,7 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
 								mr: open ? 3 : 'auto',
 								justifyContent: 'center',
 							}}>
-							<MailIcon />
+							<LogoutIcon />
 						</ListItemIcon>
 						{open && (
 							<ListItemText
