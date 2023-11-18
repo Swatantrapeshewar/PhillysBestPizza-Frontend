@@ -1,34 +1,35 @@
-import React, { useEffect, useState } from 'react';
-import { Box } from '@mui/material';
+import React, { useState } from 'react';
 import { type ReactNode } from 'react';
+import { Box } from '@mui/material';
+import CssBaseline from '@mui/material/CssBaseline';
 
 import Sidebar from './Sidebar';
-import { useLocation } from 'react-router-dom';
+import Header from './Header';
 
 interface CommonLayoutProps {
 	children: ReactNode;
 }
-
-const sidebarList = ['/'];
-const CommonLayout: React.FC<CommonLayoutProps> = ({ children }) => {
-	const location = useLocation();
+const CommonLayout = ({ children }: CommonLayoutProps): React.JSX.Element => {
 	const [open, setOpen] = useState<boolean>(true);
 
-	const handleSidebar = (): void => {
-		const isOpen = sidebarList.some(
-			(screen) => screen === location.pathname,
-		);
-		setOpen(isOpen);
+	const handleOpen = (status: boolean): void => {
+		setOpen(status);
 	};
-	useEffect(() => {
-		handleSidebar();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [location]);
-
 	return (
-		<Box id="handleSidebar">
-			<Sidebar open={open} />
-			<Box className="main-layout-right-side">{children}</Box>
+		<Box sx={{ display: 'flex' }}>
+			<CssBaseline />
+			<Header open={open} handleOpen={handleOpen} />
+			<Sidebar open={open} handleOpen={handleOpen} />
+			<Box
+				component="main"
+				sx={{
+					flexGrow: 1,
+					p: 3,
+					marginLeft: open ? '260px' : '',
+					marginTop: '50px',
+				}}>
+				{children}
+			</Box>
 		</Box>
 	);
 };
