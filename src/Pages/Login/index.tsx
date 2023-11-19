@@ -80,6 +80,7 @@ const Login = (): React.JSX.Element => {
 
 		const result = await dispatch(userLogin(requestBody));
 		if (!isAPIActionRejected(result.type)) {
+			toast.success('Login Successful');
 			navigate('/');
 		}
 	};

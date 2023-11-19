@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAppSelector } from '../../Hooks/reduxHooks';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { Container, Grid, Paper } from '@mui/material';
 import { Copyright } from '@mui/icons-material';
 import ItemsCharts from './chart';
+
+// Hooks
+import { useAppSelector } from '../../Hooks/reduxHooks';
 
 const Dashboard = (): React.JSX.Element => {
 	const navigate = useNavigate();
@@ -20,7 +22,7 @@ const Dashboard = (): React.JSX.Element => {
 				navigate('/login');
 			}
 		} else {
-			navigate('/login'); // Handle the case where 'PhillyUser' is not in localStorage
+			navigate('/login');
 		}
 	}, [user, navigate]);
 

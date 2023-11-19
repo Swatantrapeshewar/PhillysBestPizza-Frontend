@@ -8,8 +8,6 @@ export interface LoginRequest {
 const baseAPIURL = process.env.API_URL;
 
 export const login = async (data: LoginRequest): Promise<string> => {
-	console.log('baseAPIURL', baseAPIURL);
-	console.log('checkme');
 	const response = axios
 		.post(`${baseAPIURL}/user/login`, data)
 		.then(function (response) {
