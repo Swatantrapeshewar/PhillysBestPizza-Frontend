@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -7,6 +7,10 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
+import { useAppDispatch, useAppSelector } from '../../Hooks/reduxHooks';
+import { getBranchesUser } from '../../Services/Reducers/UserReducer';
+import Loader from 'src/Layout/Loader';
+import { Typography } from '@mui/material';
 
 interface Column {
 	id: 'firstName' | 'lastName' | 'email' | 'role' | 'branch' | 'action';
@@ -25,50 +29,30 @@ const columns: readonly Column[] = [
 	{ id: 'action', label: 'Action', minWidth: 100 },
 ];
 
-interface Data {
-	firstName: string;
-	lastName: string;
-	email: string;
-	role: string;
-	branch: string;
-	action: string;
+interface TableProps {
+	branchId: string;
 }
 
-function createData(
-	firstName: string,
-	lastName: string,
-	email: string,
-	role: string,
-	branch: string,
-	action: string,
-): Data {
-	return { firstName, lastName, email, role, branch, action };
-}
+export default function StickyHeadTable(props: TableProps): React.JSX.Element {
+	const dispatch = useAppDispatch();
 
-const rows = [
-	createData(
-		'John',
-		'Doe',
-		'john.doe@example.com',
-		'Admin',
-		'Main Branch',
-		'Edit/Delete',
-	),
-	createData(
-		'Jane',
-		'Smith',
-		'jane.smith@example.com',
-		'User',
-		'Branch A',
-		'Edit/Delete',
-	),
-	// Add more sample data as needed
-];
+	const { branchId } = props;
 
-export default function StickyHeadTable(): React.JSX.Element {
+	const { branchUsersList, loading } = useAppSelector((state) => state.user);
+
 	const [page, setPage] = React.useState(0);
 	const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
+	useEffect(() => {
+		if (branchId !== '') {
+			void fetchBranches();
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [branchId, dispatch]);
+
+	async function fetchBranches(): Promise<void> {
+		await dispatch(getBranchesUser(branchId));
+	}
 	const handleChangePage = (event: unknown, newPage: number): void => {
 		setPage(newPage);
 	};
@@ -82,6 +66,7 @@ export default function StickyHeadTable(): React.JSX.Element {
 
 	return (
 		<>
+			<Loader open={loading} />
 			<Paper
 				sx={{
 					width: '100%',
@@ -89,67 +74,86 @@ export default function StickyHeadTable(): React.JSX.Element {
 					boxShadow: 'none',
 					borderRadius: '0',
 				}}>
-				<TableContainer sx={{ maxHeight: 440 }}>
-					<Table
-						aria-label="sticky table"
-						sx={{ background: '#fff' }}>
-						<TableHead>
-							<TableRow>
-								{columns.map((column) => (
-									<TableCell
-										key={column.id}
-										align={column.align}
-										style={{ minWidth: column.minWidth }}>
-										{column.label}
-									</TableCell>
-								))}
-							</TableRow>
-						</TableHead>
-						<TableBody>
-							{rows
-								.slice(
-									page * rowsPerPage,
-									page * rowsPerPage + rowsPerPage,
-								)
-								.map((row, index) => {
-									return (
-										<TableRow
-											hover
-											role="checkbox"
-											tabIndex={-1}
-											key={`item-${index}-${row.firstName}`}>
-											{columns.map((column) => {
-												const value = row[column.id];
-												return (
-													<TableCell
-														key={column.id}
-														align={column.align}>
-														{column.format !=
-															null &&
-														typeof value ===
-															'string'
-															? column.format(
-																	value,
-															  )
-															: value}
-													</TableCell>
-												);
-											})}
-										</TableRow>
-									);
-								})}
-						</TableBody>
-					</Table>
-				</TableContainer>
-				<TablePagination
-					rowsPerPageOptions={[10, 25, 100]}
-					component="div"
-					count={rows.length}
-					rowsPerPage={rowsPerPage}
-					page={page}
-					onPageChange={handleChangePage}
-					onRowsPerPageChange={handleChangeRowsPerPage}
-				/>
+				{branchUsersList.length > 0 ? (
+					<>
+						<TableContainer sx={{ maxHeight: 440 }}>
+							<Table
+								aria-label="sticky table"
+								sx={{ background: '#fff' }}>
+								<TableHead>
+									<TableRow>
+										{columns.map((column) => (
+											<TableCell
+												key={column.id}
+												align={column.align}
+												style={{
+													minWidth: column.minWidth,
+												}}>
+												{column.label}
+											</TableCell>
+										))}
+									</TableRow>
+								</TableHead>
+								<TableBody>
+									{branchUsersList
+										.slice(
+											page * rowsPerPage,
+											page * rowsPerPage + rowsPerPage,
+										)
+										.map((row, index) => {
+											return (
+												<TableRow
+													hover
+													role="checkbox"
+													tabIndex={-1}
+													key={`item-${index}-${row.id}`}>
+													{columns.map((column) => {
+														const value =
+															row[column.id];
+														const roleName =
+															row.role.roleName;
+														const branchName =
+															row.branch
+																.storeName;
+														console.log(
+															'value',
+															row[column.id],
+														);
+														return (
+															<TableCell
+																key={column.id}
+																align={
+																	column.align
+																}>
+																{column.id ===
+																'role'
+																	? roleName
+																	: column.id ===
+																	  'branch'
+																	? branchName
+																	: value?.toString()}
+															</TableCell>
+														);
+													})}
+												</TableRow>
+											);
+										})}
+								</TableBody>
+							</Table>
+						</TableContainer>
+						<TablePagination
+							rowsPerPageOptions={[10, 25, 100]}
+							component="div"
+							count={branchUsersList.length}
+							rowsPerPage={rowsPerPage}
+							page={page}
+							onPageChange={handleChangePage}
+							onRowsPerPageChange={handleChangeRowsPerPage}
+						/>
+					</>
+				) : (
+					<Typography>No Users found for this branch</Typography>
+				)}
 			</Paper>
 		</>
 	);

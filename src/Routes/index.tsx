@@ -10,6 +10,7 @@ import InviteUser from '../Pages/InviteUser';
 import ManageItems from '../Pages/ManageItem';
 import ProfileSettings from '../Pages/Profile';
 import ManageBranch from '../Pages/ManageBranch';
+import AccountSetup from '../Pages/Setup';
 
 const Router = (): React.JSX.Element => {
 	return (
@@ -18,6 +19,7 @@ const Router = (): React.JSX.Element => {
 				<Route path="/login" Component={Login} />
 				<Route path="/forgot-password" Component={ForgotPassword} />
 				<Route path="/reset-password" Component={ResetPassword} />
+				<Route path="/accountSetup" Component={AccountSetup} />
 
 				<Route
 					element={
