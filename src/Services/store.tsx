@@ -1,11 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
 import userReducer from '../Services/Reducers/UserReducer';
 import BranchReducer from './Reducers/BranchReducer';
+import CategoryReducer from './Reducers/CategoryReducer';
+import ItemReducer from './Reducers/ItemReducer';
 
 const store = configureStore({
 	reducer: {
 		user: userReducer,
 		branch: BranchReducer,
+		category: CategoryReducer,
+		item: ItemReducer,
 	},
 });
 
