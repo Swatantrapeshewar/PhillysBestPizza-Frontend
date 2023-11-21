@@ -5,6 +5,8 @@ import { Button, Container, Grid, Typography } from '@mui/material';
 import AddItem from './AddItemModal';
 import ItemTable from './ItemTable';
 
+const tobeEditItem = { id: '' };
+
 const ManageItems = (): React.JSX.Element => {
 	const [openItemModal, setOpenItemModal] = useState(false);
 
@@ -41,7 +43,11 @@ const ManageItems = (): React.JSX.Element => {
 				</Stack>
 			</Box>
 
-			<AddItem open={openItemModal} handleClose={handleClose} />
+			<AddItem
+				open={openItemModal}
+				handleClose={handleClose}
+				toBeEditedItemDetails={tobeEditItem}
+			/>
 		</>
 	);
 };

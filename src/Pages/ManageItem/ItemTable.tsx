@@ -7,10 +7,27 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
+import { Button, Typography } from '@mui/material';
+import { toast } from 'react-toastify';
+
+// Hooks
 import { useAppDispatch, useAppSelector } from '../../Hooks/reduxHooks';
-import { Typography } from '@mui/material';
+
+// Component
 import Loader from '../../Layout/Loader';
-import { fetchItems } from '../../Services/Reducers/ItemReducer';
+import UpdateItem from './AddItemModal';
+
+// Reducer
+import {
+	deleteItemById,
+	fetchItems,
+} from '../../Services/Reducers/ItemReducer';
+
+// Services
+import { type ListItemResponse } from '../../Services/APIs/ItemAPI';
+
+// Utils
+import { isAPIActionRejected } from '../../Utils/helper';
 
 interface Column {
 	id:
@@ -41,11 +58,24 @@ export default function StickyHeadTable(): React.JSX.Element {
 
 	const [page, setPage] = React.useState(0);
 	const [rowsPerPage, setRowsPerPage] = React.useState(10);
+	const [openEditModal, setOpenEditModal] = React.useState(false);
+	const [tobeEditedItemDetails, setTobeEditedItemDetails] = React.useState({
+		id: '',
+	});
 
 	useEffect(() => {
 		void getItems();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [dispatch]);
+
+	const handleEditModalOpen = (row: ListItemResponse): void => {
+		setTobeEditedItemDetails(row);
+		setOpenEditModal(true);
+	};
+	const handleEditModalClose = (): void => {
+		setOpenEditModal(false);
+		setTobeEditedItemDetails({ id: '' });
+	};
 
 	async function getItems(): Promise<void> {
 		await dispatch(fetchItems());
@@ -60,6 +90,16 @@ export default function StickyHeadTable(): React.JSX.Element {
 	): void => {
 		setRowsPerPage(+event.target.value);
 		setPage(0);
+	};
+
+	const handleItemDelete = async (
+		itemDetails: ListItemResponse,
+	): Promise<void> => {
+		const result = await dispatch(deleteItemById(itemDetails.id));
+		if (!isAPIActionRejected(result.type)) {
+			toast.success('Item removed Successfully');
+			await dispatch(fetchItems());
+		}
 	};
 
 	return (
@@ -117,9 +157,31 @@ export default function StickyHeadTable(): React.JSX.Element {
 																	column.align
 																}>
 																{column.id ===
-																'category'
-																	? category
-																	: value?.toString()}
+																'category' ? (
+																	category
+																) : column.id ===
+																  'action' ? (
+																	<>
+																		<Button
+																			onClick={() => {
+																				handleEditModalOpen(
+																					row,
+																				);
+																			}}>
+																			Edit
+																		</Button>
+																		<Button
+																			onClick={() => {
+																				void handleItemDelete(
+																					row,
+																				);
+																			}}>
+																			Delete
+																		</Button>
+																	</>
+																) : (
+																	value?.toString()
+																)}
 															</TableCell>
 														);
 													})}
@@ -143,6 +205,12 @@ export default function StickyHeadTable(): React.JSX.Element {
 					<Typography>No Users found for this branch</Typography>
 				)}
 			</Paper>
+
+			<UpdateItem
+				open={openEditModal}
+				handleClose={handleEditModalClose}
+				toBeEditedItemDetails={tobeEditedItemDetails}
+			/>
 		</>
 	);
 }

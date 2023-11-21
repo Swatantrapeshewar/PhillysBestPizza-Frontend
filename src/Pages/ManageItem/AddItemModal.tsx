@@ -14,7 +14,11 @@ import Stack from '@mui/material/Stack';
 import { toast } from 'react-toastify';
 
 // Reducer
-import { createItem, fetchItems } from '../../Services/Reducers/ItemReducer';
+import {
+	createItem,
+	fetchItems,
+	updateItemById,
+} from '../../Services/Reducers/ItemReducer';
 import {
 	createCategory,
 	fetchCategories,
@@ -25,6 +29,9 @@ import { useAppDispatch, useAppSelector } from '../../Hooks/reduxHooks';
 
 // Utils
 import { isAPIActionRejected } from '../../Utils/helper';
+
+// Services
+import { type ListCategoryResponse } from '../../Services/APIs/CategoryAPI';
 
 const style = {
 	position: 'absolute' as const,
@@ -49,6 +56,20 @@ interface ItemDataState {
 	weeklyThreshold: string;
 }
 
+export interface ToBeEditedItem {
+	id: string;
+	name?: string;
+	description?: string;
+	image?: null | string;
+	dailyThreshold?: string;
+	weeklyThreshold?: string;
+	overallThreshold?: string;
+	createdAt?: string;
+	updatedAt?: string;
+	action?: string;
+	category?: ListCategoryResponse;
+}
+
 const initialItemData = {
 	name: '',
 	description: '',
@@ -61,12 +82,13 @@ const initialItemData = {
 interface AddItemProps {
 	open: boolean;
 	handleClose: () => void;
+	toBeEditedItemDetails: ToBeEditedItem;
 }
 
 const AddItem = (props: AddItemProps): React.JSX.Element => {
 	const dispatch = useAppDispatch();
 
-	const { open, handleClose } = props;
+	const { open, handleClose, toBeEditedItemDetails } = props;
 
 	const { categories } = useAppSelector((state) => state.category);
 
@@ -82,10 +104,22 @@ const AddItem = (props: AddItemProps): React.JSX.Element => {
 	}, [dispatch]);
 
 	useEffect(() => {
-		setItemDetails(initialItemData);
+		if (toBeEditedItemDetails.id !== '') {
+			setItemDetails({
+				name: toBeEditedItemDetails.name ?? '',
+				description: toBeEditedItemDetails.description ?? '',
+				category: toBeEditedItemDetails?.category?.id ?? '',
+				image: toBeEditedItemDetails.image ?? '',
+				overallThreshold: toBeEditedItemDetails.overallThreshold ?? '',
+				weeklyThreshold: toBeEditedItemDetails.weeklyThreshold ?? '',
+			});
+		} else {
+			setItemDetails(initialItemData);
+		}
+
 		setShowAddCategoryOption(false);
 		setNewCategoryName('');
-	}, [open]);
+	}, [open, toBeEditedItemDetails]);
 
 	async function getCategories(): Promise<void> {
 		await dispatch(fetchCategories());
@@ -133,6 +167,44 @@ const AddItem = (props: AddItemProps): React.JSX.Element => {
 		}
 	};
 
+	const handleUpdateItem = async (): Promise<void> => {
+		if (itemDetails.name.trim() === '') {
+			toast.error('Please enter item name');
+			return;
+		}
+		if (itemDetails.category.trim() === '') {
+			toast.error('Please select item category');
+			return;
+		}
+		if (itemDetails.overallThreshold.trim() === '') {
+			toast.error('Please enter item overall threshold');
+			return;
+		}
+		if (itemDetails.weeklyThreshold.trim() === '') {
+			toast.error('Please enter item weekly threshold');
+			return;
+		}
+
+		const requestBody = {
+			categoryId: itemDetails.category,
+			name: itemDetails.name,
+			description: itemDetails.description ?? '',
+			dailyThreshold: '',
+			weeklyThreshold: itemDetails.weeklyThreshold,
+			overallThreshold: itemDetails.overallThreshold,
+		};
+		const itemId = toBeEditedItemDetails.id;
+
+		const result = await dispatch(
+			updateItemById({ data: requestBody, itemId }),
+		);
+		if (!isAPIActionRejected(result.type)) {
+			toast.success('Item updated Successfully');
+			await dispatch(fetchItems());
+			handleClose();
+		}
+	};
+
 	const handleCreateCategory = async (): Promise<void> => {
 		if (newCategoryName.trim() === '') {
 			toast.error('Please enter Category name to be created');
@@ -148,6 +220,7 @@ const AddItem = (props: AddItemProps): React.JSX.Element => {
 			void getCategories();
 		}
 	};
+
 	return (
 		<>
 			<Modal
@@ -362,14 +435,25 @@ const AddItem = (props: AddItemProps): React.JSX.Element => {
 							Cancel
 						</Button>
 
-						<Button
-							variant="contained"
-							size="medium"
-							onClick={() => {
-								void handleCreateItem();
-							}}>
-							Create Item
-						</Button>
+						{toBeEditedItemDetails.id !== '' ? (
+							<Button
+								variant="contained"
+								size="medium"
+								onClick={() => {
+									void handleUpdateItem();
+								}}>
+								Update Item
+							</Button>
+						) : (
+							<Button
+								variant="contained"
+								size="medium"
+								onClick={() => {
+									void handleCreateItem();
+								}}>
+								Create Item
+							</Button>
+						)}
 					</Box>
 				</Box>
 			</Modal>

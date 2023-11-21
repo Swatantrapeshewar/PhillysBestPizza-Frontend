@@ -27,6 +27,16 @@ export interface ListItemResponse {
 	category: ListCategoryResponse;
 }
 
+export interface UpdateItemRequestBodyParams {
+	categoryId: string;
+	name: string;
+	description?: string;
+	image?: string;
+	dailyThreshold?: string;
+	weeklyThreshold?: string;
+	overallThreshold?: string;
+}
+
 export const addItem = async (
 	data: AddItemRequestBodyParams,
 ): Promise<boolean> => {
@@ -57,6 +67,45 @@ export const listItems = async (): Promise<ListItemResponse[]> => {
 		.get(`${baseAPIURL}/item/list`, AuthHeader)
 		.then(function (response) {
 			return response.data.itemList;
+		})
+		.catch(function (error) {
+			console.log(error);
+			throw error;
+		});
+	return await response;
+};
+
+export const updateItem = async (
+	data: UpdateItemRequestBodyParams,
+	itemId: string,
+): Promise<boolean> => {
+	const AuthHeader = {
+		headers: {
+			Authorization: `${getAccessToken()}`,
+		},
+	};
+	const response = axios
+		.put(`${baseAPIURL}/item/update/${itemId}`, data, AuthHeader)
+		.then(function (response) {
+			return response.status === 201;
+		})
+		.catch(function (error) {
+			console.log(error);
+			throw error;
+		});
+	return await response;
+};
+
+export const deleteItem = async (itemId: string): Promise<boolean> => {
+	const AuthHeader = {
+		headers: {
+			Authorization: `${getAccessToken()}`,
+		},
+	};
+	const response = axios
+		.delete(`${baseAPIURL}/item/delete/${itemId}`, AuthHeader)
+		.then(function (response) {
+			return response.status === 201;
 		})
 		.catch(function (error) {
 			console.log(error);

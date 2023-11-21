@@ -1,7 +1,7 @@
 import { SvgIcon } from '@mui/material';
 import React from 'react';
 
-export default function BackArrow(): React.JSX.Element {
+export default function InviteUserIcon(): React.JSX.Element {
 	return (
 		<SvgIcon
 			xmlns="http://www.w3.org/2000/svg"
