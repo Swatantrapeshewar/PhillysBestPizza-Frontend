@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getAccessToken } from 'src/Utils/helper';
+import { getAccessToken } from '../../Utils/helper';
 
 export interface AddBranchRequestBodyParams {
 	storeName: string;

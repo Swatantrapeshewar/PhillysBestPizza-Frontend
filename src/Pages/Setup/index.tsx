@@ -17,8 +17,12 @@ import { isAPIActionRejected } from '../../Utils/helper';
 
 // Assets
 import phillyLogo from '../../Assets/Images/Phillys_Logo.png';
-import { useAppSelector } from 'src/Hooks/reduxHooks';
-import Loader from 'src/Layout/Loader';
+
+// Hooks
+import { useAppSelector } from '../../Hooks/reduxHooks';
+
+// Components
+import Loader from '../../Layout/Loader';
 
 // const isEmailValid = (email: string): boolean => {
 // 	const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;

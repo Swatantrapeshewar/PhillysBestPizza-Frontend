@@ -3,10 +3,13 @@ import { type ReactNode } from 'react';
 import { Box } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 
+// Components
 import Sidebar from './Sidebar';
 import Header from './Header';
-import { useAppSelector } from 'src/Hooks/reduxHooks';
 import Loader from './Loader';
+
+// Hooks
+import { useAppSelector } from '../Hooks/reduxHooks';
 
 interface CommonLayoutProps {
 	children: ReactNode;

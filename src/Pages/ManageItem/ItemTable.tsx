@@ -8,8 +8,8 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import { useAppDispatch, useAppSelector } from '../../Hooks/reduxHooks';
-import Loader from 'src/Layout/Loader';
 import { Typography } from '@mui/material';
+import Loader from '../../Layout/Loader';
 import { fetchItems } from '../../Services/Reducers/ItemReducer';
 
 interface Column {

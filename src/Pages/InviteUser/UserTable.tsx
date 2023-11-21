@@ -7,10 +7,16 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import { useAppDispatch, useAppSelector } from '../../Hooks/reduxHooks';
-import { getBranchesUser } from '../../Services/Reducers/UserReducer';
-import Loader from 'src/Layout/Loader';
 import { Typography } from '@mui/material';
+
+// Hooks
+import { useAppDispatch, useAppSelector } from '../../Hooks/reduxHooks';
+
+// Reducer
+import { getBranchesUser } from '../../Services/Reducers/UserReducer';
+
+// Component
+import Loader from '../../Layout/Loader';
 
 interface Column {
 	id: 'firstName' | 'lastName' | 'email' | 'role' | 'branch' | 'action';

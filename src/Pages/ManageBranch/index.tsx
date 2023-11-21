@@ -11,6 +11,7 @@ import {
 	Grid,
 	Typography,
 } from '@mui/material';
+import { toast } from 'react-toastify';
 
 // Asset
 import phillysLogo from '../../Assets/Images/Phillys_Logo.png';
@@ -27,8 +28,7 @@ import {
 
 // Layout
 import Loader from '../../Layout/Loader';
-import { isAPIActionRejected } from 'src/Utils/helper';
-import { toast } from 'react-toastify';
+import { isAPIActionRejected } from '../../Utils/helper';
 
 export interface BranchDetails {
 	id: string;
