@@ -8,7 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import { Button, Typography } from '@mui/material';
-// import { toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 // Hooks
 import { useAppDispatch, useAppSelector } from '../../Hooks/reduxHooks';
@@ -20,11 +20,14 @@ import UpdateItem from './AddInventoryItem';
 // Reducer
 
 // Services
-import { fetchInventoryItems } from '../../Services/Reducers/InventoryItemReducer';
+import {
+	deleteInventoryItemById,
+	fetchInventoryItems,
+} from '../../Services/Reducers/InventoryItemReducer';
 import { type InventoryItem } from '../../Services/APIs/InventoryItemAPI';
 
 // Utils
-// import { isAPIActionRejected } from '../../Utils/helper';
+import { isAPIActionRejected } from '../../Utils/helper';
 
 interface Column {
 	id:
@@ -61,7 +64,6 @@ export default function StickyHeadTable(): React.JSX.Element {
 	const { InventoryItems, loading } = useAppSelector(
 		(state) => state.inventoryItem,
 	);
-	console.log(InventoryItems, '/InventoryItems');
 
 	const [page, setPage] = React.useState(0);
 	const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -98,15 +100,15 @@ export default function StickyHeadTable(): React.JSX.Element {
 		setPage(0);
 	};
 
-	// const handleItemDelete = async (
-	// 	itemDetails: InventoryItem,
-	// ): Promise<void> => {
-	// 	const result = await dispatch(deleteItemById(itemDetails.id));
-	// 	if (!isAPIActionRejected(result.type)) {
-	// 		toast.success('Item removed Successfully');
-	// 		await dispatch(fetchItems());
-	// 	}
-	// };
+	const handleItemDelete = async (
+		itemDetails: InventoryItem,
+	): Promise<void> => {
+		const result = await dispatch(deleteInventoryItemById(itemDetails.id));
+		if (!isAPIActionRejected(result.type)) {
+			toast.success('Inventory Item details removed Successfully');
+			await dispatch(fetchInventoryItems());
+		}
+	};
 
 	return (
 		<>
@@ -184,12 +186,11 @@ export default function StickyHeadTable(): React.JSX.Element {
 																		Edit
 																	</Button>
 																	<Button
-																	// onClick={() => {
-																	// 	void handleItemDelete(
-																	// 		row,
-																	// 	);
-																	// }}
-																	>
+																		onClick={() => {
+																			void handleItemDelete(
+																				row,
+																			);
+																		}}>
 																		Delete
 																	</Button>
 																</>
@@ -221,7 +222,7 @@ export default function StickyHeadTable(): React.JSX.Element {
 						/>
 					</>
 				) : (
-					<Typography>No Users found for this branch</Typography>
+					<Typography>No Inventory item found</Typography>
 				)}
 			</Paper>
 

@@ -46,7 +46,7 @@ const Router = (): React.JSX.Element => {
 					// Component={ResetPassword}
 				/>
 				<Route
-					path="/accountSetup"
+					path="/account-setup"
 					element={
 						<GuestRoute>
 							<AccountSetup />

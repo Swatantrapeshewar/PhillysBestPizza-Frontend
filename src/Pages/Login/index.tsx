@@ -17,7 +17,7 @@ import { useAppSelector } from '../../Hooks/reduxHooks';
 import Loader from '../../Layout/Loader';
 import useAuth from '../../Hooks/useAuth';
 
-const isEmailValid = (email: string): boolean => {
+export const isEmailValid = (email: string): boolean => {
 	const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 	return emailRegex.test(email);
 };

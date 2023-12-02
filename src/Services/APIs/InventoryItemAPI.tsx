@@ -88,7 +88,30 @@ export const updateInventoryItem = async (
 			AuthHeader,
 		)
 		.then(function (response) {
-			return response.status === 201;
+			return response.status === 200;
+		})
+		.catch(function (error) {
+			console.log(error);
+			throw error;
+		});
+	return await response;
+};
+
+export const deleteInventoryItem = async (
+	inventoryItemId: string,
+): Promise<boolean> => {
+	const AuthHeader = {
+		headers: {
+			Authorization: `${getAccessToken()}`,
+		},
+	};
+	const response = axios
+		.delete(
+			`${baseAPIURL}/inventory/item/delete/${inventoryItemId}`,
+			AuthHeader,
+		)
+		.then(function (response) {
+			return response.status === 200;
 		})
 		.catch(function (error) {
 			console.log(error);

@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { deleteItem } from '../APIs/ItemAPI';
 import {
 	addInventoryItem,
 	listInventroyItems,
 	type AddInventoryItemRequest,
 	type InventoryItem,
 	updateInventoryItem,
+	deleteInventoryItem,
 } from '../APIs/InventoryItemAPI';
 
 export const fetchInventoryItems = createAsyncThunk(
@@ -53,11 +53,11 @@ export const updateInventoryItemById = createAsyncThunk(
 	},
 );
 
-export const deleteItemById = createAsyncThunk(
-	'item/deleteItemById',
-	async (itemId: string) => {
+export const deleteInventoryItemById = createAsyncThunk(
+	'inventoryItem/delete',
+	async (inventoryItemId: string) => {
 		try {
-			const response = await deleteItem(itemId);
+			const response = await deleteInventoryItem(inventoryItemId);
 			return response;
 		} catch (error) {
 			console.error(error);
@@ -122,13 +122,13 @@ const inventoryItemSlice = createSlice({
 			})
 
 			// Delete Item
-			.addCase(deleteItemById.pending, (state) => {
+			.addCase(deleteInventoryItemById.pending, (state) => {
 				state.loading = true;
 			})
-			.addCase(deleteItemById.fulfilled, (state, action) => {
+			.addCase(deleteInventoryItemById.fulfilled, (state, action) => {
 				state.loading = false;
 			})
-			.addCase(deleteItemById.rejected, (state, action) => {
+			.addCase(deleteInventoryItemById.rejected, (state, action) => {
 				state.loading = false;
 				state.error = action.error.message;
 			});
