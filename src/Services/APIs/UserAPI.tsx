@@ -38,6 +38,13 @@ export interface UpdateRequest {
 	newPassword?: string;
 }
 
+export interface UpdateUserRequest {
+	userId: string;
+	firstName: string;
+	role: string;
+	branch: string;
+}
+
 export interface ListUserByBranchResponse {
 	id: string;
 	email: string;
@@ -121,9 +128,7 @@ export const setup = async (data: SetupRequest): Promise<string> => {
 	return await response;
 };
 
-export const updateUserProfile = async (
-	data: UpdateRequest,
-): Promise<string> => {
+export const updateMyProfile = async (data: UpdateRequest): Promise<string> => {
 	const AuthHeader = {
 		headers: {
 			Authorization: `${getAccessToken()}`,
@@ -150,6 +155,46 @@ export const userProfile = async (): Promise<User> => {
 
 	const response = axios
 		.get(`${baseAPIURL}/user/me`, AuthHeader)
+		.then(function (response) {
+			return response.data;
+		})
+		.catch(function (error) {
+			console.log(error);
+			throw error;
+		});
+	return await response;
+};
+
+export const updateUserProfile = async (
+	data: UpdateUserRequest,
+): Promise<boolean> => {
+	const AuthHeader = {
+		headers: {
+			Authorization: `${getAccessToken()}`,
+		},
+	};
+
+	const response = axios
+		.put(`${baseAPIURL}/user/updateUser`, data, AuthHeader)
+		.then(function (response) {
+			return response.data;
+		})
+		.catch(function (error) {
+			console.log(error);
+			throw error;
+		});
+	return await response;
+};
+
+export const deleteUser = async (userId: string): Promise<boolean> => {
+	const AuthHeader = {
+		headers: {
+			Authorization: `${getAccessToken()}`,
+		},
+	};
+
+	const response = axios
+		.delete(`${baseAPIURL}/user/deleteUser/${userId}`, AuthHeader)
 		.then(function (response) {
 			return response.data;
 		})

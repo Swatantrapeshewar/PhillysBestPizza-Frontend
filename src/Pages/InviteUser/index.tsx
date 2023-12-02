@@ -22,7 +22,9 @@ import { useAppDispatch, useAppSelector } from '../../Hooks/reduxHooks';
 
 // Reducer
 import { fetchBranches } from '../../Services/Reducers/BranchReducer';
-import Loader from 'src/Layout/Loader';
+import Loader from '../../Layout/Loader';
+
+const tobeEditUser = { id: '' };
 
 const InviteUser = (): React.JSX.Element => {
 	const dispatch = useAppDispatch();
@@ -110,7 +112,11 @@ const InviteUser = (): React.JSX.Element => {
 				</Stack>
 			</Box>
 
-			<InviteUserModal open={openInviteModal} handleClose={handleClose} />
+			<InviteUserModal
+				open={openInviteModal}
+				handleClose={handleClose}
+				toBeEditedUserDetails={tobeEditUser}
+			/>
 		</>
 	);
 };
