@@ -56,6 +56,12 @@ export interface ListUserByBranchResponse {
 	branch: ListBranchesResponse;
 	action?: string;
 }
+
+export interface ResetPasswordRequest {
+	email: string;
+	password: string;
+	token: string;
+}
 const baseAPIURL = process.env.API_URL;
 
 export const login = async (data: LoginRequest): Promise<string> => {
@@ -186,6 +192,20 @@ export const updateUserProfile = async (
 	return await response;
 };
 
+export const forgotPassword = async (email: string): Promise<string> => {
+	const data = { email };
+	const response = axios
+		.post(`${baseAPIURL}/user/forgotPassword`, data)
+		.then(function (response) {
+			return response.data;
+		})
+		.catch(function (error) {
+			console.log(error);
+			throw error;
+		});
+	return await response;
+};
+
 export const deleteUser = async (userId: string): Promise<boolean> => {
 	const AuthHeader = {
 		headers: {
@@ -195,6 +215,21 @@ export const deleteUser = async (userId: string): Promise<boolean> => {
 
 	const response = axios
 		.delete(`${baseAPIURL}/user/deleteUser/${userId}`, AuthHeader)
+		.then(function (response) {
+			return response.data;
+		})
+		.catch(function (error) {
+			console.log(error);
+			throw error;
+		});
+	return await response;
+};
+
+export const resetPassword = async (
+	data: ResetPasswordRequest,
+): Promise<string> => {
+	const response = axios
+		.post(`${baseAPIURL}/user/resetPassword`, data)
 		.then(function (response) {
 			return response.data;
 		})

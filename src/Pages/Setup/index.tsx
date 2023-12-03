@@ -29,7 +29,7 @@ import Loader from '../../Layout/Loader';
 // 	return emailRegex.test(email);
 // };
 
-const isPasswordValid = (password: string): boolean => {
+export const isPasswordValid = (password: string): boolean => {
 	const passwordRegex =
 		/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 	return passwordRegex.test(password);

@@ -44,6 +44,11 @@ const sideBarMenuItems: SidebarRoutesDetails[] = [
 		route: '/manage-item',
 	},
 	{
+		name: 'Inventory Items',
+		icon: <ManageItemsIcon />,
+		route: '/inventory-item',
+	},
+	{
 		name: 'Invite Users',
 		icon: <InviteUserIcon />,
 		route: '/invite-user',

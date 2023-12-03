@@ -1,20 +1,23 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import {
 	login,
-	listByBranch,
-	invite,
 	setup,
+	invite,
 	userProfile,
-	updateMyProfile,
+	listByBranch,
+	forgotPassword,
+	resetPassword,
 	updateUserProfile,
+	updateMyProfile,
+	deleteUser,
 	type LoginRequest,
-	type ListUserByBranchResponse,
 	type InviteRequest,
 	type SetupRequest,
 	type UpdateRequest,
 	type UserRoleResponse,
+	type ResetPasswordRequest,
+	type ListUserByBranchResponse,
 	type UpdateUserRequest,
-	deleteUser,
 } from '../APIs/UserAPI';
 import { type ListBranchesResponse } from '../APIs/BranchAPI';
 
@@ -103,6 +106,22 @@ export const profile = createAsyncThunk('profile/status', async () => {
 	const response = await userProfile();
 	return response;
 });
+
+export const forgotUserPassword = createAsyncThunk(
+	'user/forgortPassword',
+	async (email: string) => {
+		const response = await forgotPassword(email);
+		return response;
+	},
+);
+
+export const resetUserPassword = createAsyncThunk(
+	'user/resetPassword',
+	async (data: ResetPasswordRequest) => {
+		const response = await resetPassword(data);
+		return response;
+	},
+);
 
 export const createUserSlice = createSlice({
 	name: 'user',
@@ -202,6 +221,28 @@ export const createUserSlice = createSlice({
 			state.loading = false;
 		});
 		builder.addCase(profile.rejected, (state, action) => {
+			state.loading = false;
+		});
+
+		// Forgot Password
+		builder.addCase(forgotUserPassword.pending, (state, action) => {
+			state.loading = true;
+		});
+		builder.addCase(forgotUserPassword.fulfilled, (state, action) => {
+			state.loading = false;
+		});
+		builder.addCase(forgotUserPassword.rejected, (state, action) => {
+			state.loading = false;
+		});
+
+		// Reset Password
+		builder.addCase(resetUserPassword.pending, (state, action) => {
+			state.loading = true;
+		});
+		builder.addCase(resetUserPassword.fulfilled, (state, action) => {
+			state.loading = false;
+		});
+		builder.addCase(resetUserPassword.rejected, (state, action) => {
 			state.loading = false;
 		});
 	},
