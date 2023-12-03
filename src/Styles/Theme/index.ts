@@ -7,7 +7,7 @@ const theme = createTheme({
 			main: '#FF6347',
 			dark: '#dc442e',
 		},
-		secondary: { main: '#dc0250' },
+		secondary: { main: '#333333' },
 		error: { main: '#8D0000' },
 		warning: { main: '##FFD700' },
 		info: { main: '##6296b7' },
@@ -29,6 +29,28 @@ const theme = createTheme({
 					color: '#fff',
 					textTransform: 'none',
 					boxShadow: 'none',
+				},
+			},
+		},
+		MuiInputBase: {
+			styleOverrides: {
+				input: {
+					color: '#333333',
+					background: '#fff',
+					borderRadius: '31.5px',
+					border: 'none',
+					fontSize: '18px',
+					padding: '16.5px 30px !important',
+					margin: 0,
+					borderColor: '#FF6347',
+				},
+			},
+		},
+		MuiOutlinedInput: {
+			styleOverrides: {
+				root: {
+					border: 'none',
+					borderRadius: '30px',
 				},
 			},
 		},

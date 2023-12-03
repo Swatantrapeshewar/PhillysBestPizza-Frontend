@@ -65,12 +65,6 @@ const ForgotPassword = (): React.JSX.Element => {
 									borderColor: '#FF6347',
 								},
 							}}
-							inputProps={{
-								sx: {
-									color: '#5c5c5c',
-									marginLeft: '10px',
-								},
-							}}
 						/>
 
 						<Button

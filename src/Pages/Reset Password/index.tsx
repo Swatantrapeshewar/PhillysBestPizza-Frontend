@@ -48,27 +48,6 @@ const ResetPassword = (): React.JSX.Element => {
 							id="password"
 							placeholder="Password"
 							autoComplete="current-password"
-							sx={{
-								backgroundColor: '#ededed',
-								borderRadius: '31.5px',
-								'& .MuiOutlinedInput-root': {
-									border: 'none',
-									borderRadius: '30px',
-								},
-								'& .MuiInput-underline:after': {
-									borderBottom: 'none',
-									borderColor: '#FF6347',
-								},
-								'& .MuiInputBase-input:focus': {
-									borderColor: '#FF6347',
-								},
-							}}
-							inputProps={{
-								sx: {
-									color: '#5c5c5c',
-									marginLeft: '10px',
-								},
-							}}
 						/>
 
 						<TextField
@@ -80,27 +59,6 @@ const ResetPassword = (): React.JSX.Element => {
 							id="password"
 							placeholder="Confirm Password"
 							autoComplete="current-password"
-							sx={{
-								backgroundColor: '#ededed',
-								borderRadius: '31.5px',
-								'& .MuiOutlinedInput-root': {
-									border: 'none',
-									borderRadius: '30px',
-								},
-								'& .MuiInput-underline:after': {
-									borderBottom: 'none',
-									borderColor: '#FF6347',
-								},
-								'& .MuiInputBase-input:focus': {
-									borderColor: '#FF6347',
-								},
-							}}
-							inputProps={{
-								sx: {
-									color: '#5c5c5c',
-									marginLeft: '10px',
-								},
-							}}
 						/>
 
 						<Button
