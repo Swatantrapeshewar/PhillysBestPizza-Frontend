@@ -6,7 +6,6 @@ import {
 	Container,
 	FormControl,
 	Grid,
-	InputLabel,
 	MenuItem,
 	Select,
 	type SelectChangeEvent,
@@ -73,17 +72,11 @@ const InviteUser = (): React.JSX.Element => {
 						<Grid item xs={12} md={8}>
 							<Container className="right-menu-items">
 								<FormControl
-									sx={{ mt: 0, mb: 0, mr: 3, minWidth: 105 }}>
-									<InputLabel id="branch-select-autowidth-label">
-										Branch
-									</InputLabel>
+									sx={{ mt: 0, mb: 0, mr: 3, minWidth: 120 }}>
 									<Select
-										labelId="branch-select-autowidth-label"
-										id="branch-select-autowidth"
 										value={branch}
 										onChange={handleChange}
 										autoWidth
-										label="Branch"
 										size="small">
 										{branches.map((branchItem) => (
 											<MenuItem
@@ -92,13 +85,11 @@ const InviteUser = (): React.JSX.Element => {
 												{branchItem.storeName}
 											</MenuItem>
 										))}
-										{/* <MenuItem value={10}>Columbia</MenuItem>
-										<MenuItem value={21}>Elkridge</MenuItem> */}
 									</Select>
 								</FormControl>
 								<Button
 									variant="contained"
-									size="small"
+									size="large"
 									onClick={handleOpen}>
 									Invite User
 								</Button>

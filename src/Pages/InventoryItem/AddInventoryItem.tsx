@@ -74,9 +74,9 @@ export interface ToBeEditedItem {
 const initialItemData = {
 	quantity: '',
 	availableQuantity: '',
-	status: '',
+	status: 'Select Status',
 	expireDate: '',
-	item: '',
+	item: 'Select Item',
 };
 
 interface AddItemProps {
@@ -87,7 +87,7 @@ interface AddItemProps {
 
 const StatusType = [
 	{
-		id: 'InStock',
+		id: 'inStock',
 		name: 'In Stock',
 	},
 	{
@@ -107,20 +107,53 @@ const AddInventoryItem = (props: AddItemProps): React.JSX.Element => {
 	const [date, setDate] = React.useState<Dayjs>();
 
 	useEffect(() => {
+		const fetchData = async (): Promise<void> => {
+			try {
+				await dispatch(fetchItems());
+			} catch (error) {
+				console.error('Error fetching Items:', error);
+			}
+		};
+
+		void fetchData();
 		if (toBeEditedItemDetails !== null) {
 			setItemDetails({
-				item: toBeEditedItemDetails.item.id ?? '',
+				item: toBeEditedItemDetails.item.id ?? 'Select Item',
 				quantity: toBeEditedItemDetails.quantity ?? '',
 				availableQuantity:
 					toBeEditedItemDetails.availableQuantity ?? '',
-				status: toBeEditedItemDetails.status ?? '',
+				status: toBeEditedItemDetails.status ?? 'Select Status',
 				expireDate: toBeEditedItemDetails.expireDate ?? '',
 			});
 			setDate(dayjs(toBeEditedItemDetails.expireDate));
 		} else {
 			setItemDetails(initialItemData);
 		}
-	}, [open, toBeEditedItemDetails]);
+	}, [dispatch, open, toBeEditedItemDetails]);
+
+	const validateItemDetails = (): boolean => {
+		if (itemDetails.item === 'Select Item') {
+			toast.error('Please Select Item');
+			return false;
+		}
+		if (checkNullUndefiend(itemDetails.quantity)) {
+			toast.error('Please Enter Quantity');
+			return false;
+		}
+		if (checkNullUndefiend(itemDetails.availableQuantity)) {
+			toast.error('Please Enter Available Quantity');
+			return false;
+		}
+		if (itemDetails.status === 'Select Status') {
+			toast.error('Please Select Status');
+			return false;
+		}
+		if (checkNullUndefiend(itemDetails.expireDate.trim())) {
+			toast.error('Please Enter Expire Date');
+			return false;
+		}
+		return true;
+	};
 
 	const handleInputChange = (field: string, value: string): void => {
 		setItemDetails((prevData: InventoryItemDataState) => ({
@@ -130,24 +163,7 @@ const AddInventoryItem = (props: AddItemProps): React.JSX.Element => {
 	};
 
 	const handleCreateItem = async (): Promise<void> => {
-		if (checkNullUndefiend(itemDetails.item)) {
-			toast.error('Please Select Item');
-			return;
-		}
-		if (checkNullUndefiend(itemDetails.quantity)) {
-			toast.error('Please Enter Quantity');
-			return;
-		}
-		if (checkNullUndefiend(itemDetails.availableQuantity)) {
-			toast.error('Please Enter Available Quantity');
-			return;
-		}
-		if (checkNullUndefiend(itemDetails.status)) {
-			toast.error('Please Select Status');
-			return;
-		}
-		if (checkNullUndefiend(itemDetails.expireDate.trim())) {
-			toast.error('Please Enter Expire Date');
+		if (!validateItemDetails()) {
 			return;
 		}
 
@@ -162,32 +178,16 @@ const AddInventoryItem = (props: AddItemProps): React.JSX.Element => {
 		const result = await dispatch(createInventoryItem(requestBody));
 		if (!isAPIActionRejected(result.type)) {
 			toast.success('Inventory Item Created Successfully');
-			await dispatch(fetchItems());
+			await dispatch(fetchInventoryItems());
 			handleClose();
 		}
 	};
 
 	const handleUpdateItem = async (): Promise<void> => {
-		if (checkNullUndefiend(itemDetails.item)) {
-			toast.error('Please Select Item');
+		if (!validateItemDetails()) {
 			return;
 		}
-		if (checkNullUndefiend(itemDetails.quantity)) {
-			toast.error('Please Enter Quantity');
-			return;
-		}
-		if (checkNullUndefiend(itemDetails.availableQuantity)) {
-			toast.error('Please Enter Available Quantity');
-			return;
-		}
-		if (checkNullUndefiend(itemDetails.status)) {
-			toast.error('Please Select Status');
-			return;
-		}
-		if (checkNullUndefiend(itemDetails.expireDate.trim())) {
-			toast.error('Please Enter Expire Date');
-			return;
-		}
+
 		const requestBody = {
 			itemId: itemDetails.item,
 			quantity: itemDetails.quantity,
@@ -231,15 +231,11 @@ const AddInventoryItem = (props: AddItemProps): React.JSX.Element => {
 									justifyContent: 'space-between',
 									alignTtems: 'baseline',
 								}}>
-								<InputLabel
-									sx={{ marginRight: '10%' }}
-									id="item-select-autowidth-label">
+								<InputLabel sx={{ marginRight: '10%' }}>
 									Items
 								</InputLabel>
 
 								<Select
-									labelId="item-select-autowidth-label"
-									id="branch-select-autowidth"
 									sx={{ width: '65%' }}
 									value={itemDetails.item}
 									onChange={(e: {
@@ -251,8 +247,12 @@ const AddInventoryItem = (props: AddItemProps): React.JSX.Element => {
 										);
 									}}
 									autoWidth
-									label="Items"
 									size="small">
+									<MenuItem
+										key="select-item-default-1"
+										value="Select Item">
+										Select Item
+									</MenuItem>
 									{items.map((item) => (
 										<MenuItem key={item.id} value={item.id}>
 											{item.name}
@@ -272,6 +272,7 @@ const AddInventoryItem = (props: AddItemProps): React.JSX.Element => {
 								<TextField
 									sx={{ width: '65%' }}
 									type="number"
+									size="small"
 									placeholder="Quantity"
 									name="quantity"
 									value={itemDetails.quantity}
@@ -296,6 +297,7 @@ const AddInventoryItem = (props: AddItemProps): React.JSX.Element => {
 								<TextField
 									sx={{ width: '65%' }}
 									type="number"
+									size="small"
 									placeholder="Avalible Quantity"
 									value={itemDetails.availableQuantity}
 									onChange={(e) => {
@@ -312,15 +314,11 @@ const AddInventoryItem = (props: AddItemProps): React.JSX.Element => {
 									justifyContent: 'space-between',
 									alignTtems: 'baseline',
 								}}>
-								<InputLabel
-									sx={{ marginRight: '10%' }}
-									id="item-select-autowidth-label">
+								<InputLabel sx={{ marginRight: '10%' }}>
 									Status
 								</InputLabel>
 
 								<Select
-									labelId="item-select-autowidth-label"
-									id="branch-select-autowidth"
 									sx={{ width: '65%' }}
 									value={itemDetails.status}
 									onChange={(e: {
@@ -332,8 +330,12 @@ const AddInventoryItem = (props: AddItemProps): React.JSX.Element => {
 										);
 									}}
 									autoWidth
-									label="Items"
 									size="small">
+									<MenuItem
+										key="select-status-default-1"
+										value="Select Status">
+										Select Status
+									</MenuItem>
 									{StatusType.map((status) => (
 										<MenuItem
 											key={status.id}

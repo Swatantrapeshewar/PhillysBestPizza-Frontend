@@ -29,7 +29,7 @@ const ManageItems = (): React.JSX.Element => {
 							<Container className="right-menu-items">
 								<Button
 									variant="contained"
-									size="small"
+									size="large"
 									onClick={handleOpen}>
 									Add Item
 								</Button>

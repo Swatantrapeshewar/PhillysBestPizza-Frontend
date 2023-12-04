@@ -94,7 +94,7 @@ const Router = (): React.JSX.Element => {
 						}
 					/>
 					<Route
-						path="/inventory-item"
+						path="/manage-inventory"
 						element={
 							<ProtectedRoute>
 								<InvetoryItem />

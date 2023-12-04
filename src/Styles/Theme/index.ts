@@ -25,10 +25,14 @@ const theme = createTheme({
 	components: {
 		MuiButton: {
 			styleOverrides: {
+				root: {
+					borderRadius: '31.5px',
+				},
 				contained: {
 					color: '#fff',
 					textTransform: 'none',
 					boxShadow: 'none',
+					borderRadius: '31.5px',
 				},
 			},
 		},
@@ -40,7 +44,7 @@ const theme = createTheme({
 					borderRadius: '31.5px',
 					border: 'none',
 					fontSize: '18px',
-					padding: '16.5px 30px !important',
+					// padding: '5px 30px !important',
 					margin: 0,
 					borderColor: '#FF6347',
 				},
@@ -51,6 +55,16 @@ const theme = createTheme({
 				root: {
 					border: 'none',
 					borderRadius: '30px',
+				},
+			},
+		},
+		MuiSelect: {
+			styleOverrides: {
+				select: {
+					display: 'flex',
+					width: '100%',
+					alignItems: 'center',
+					textAlign: 'left',
 				},
 			},
 		},

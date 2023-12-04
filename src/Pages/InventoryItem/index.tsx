@@ -24,14 +24,14 @@ const InvetoryItem = (): React.JSX.Element => {
 					<Grid container spacing={2}>
 						<Grid item xs={12} md={4}>
 							<Typography variant="h4">
-								Inventory Items
+								Manage Inventory
 							</Typography>
 						</Grid>
 						<Grid item xs={12} md={8}>
 							<Container className="right-menu-items">
 								<Button
 									variant="contained"
-									size="small"
+									size="large"
 									onClick={handleOpen}>
 									Add Inventory Item
 								</Button>
