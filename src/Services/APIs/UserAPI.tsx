@@ -30,12 +30,13 @@ export interface UserRoleResponse {
 }
 
 export interface UpdateRequest {
-	firstName: string;
+	firstName?: string;
 	lastName?: string;
 	email: string;
 	phoneNumber?: number;
 	oldPassword?: string;
 	newPassword?: string;
+	avatar?: string | null;
 }
 
 export interface UpdateUserRequest {
@@ -56,6 +57,32 @@ export interface ListUserByBranchResponse {
 	branch: ListBranchesResponse;
 	action?: string;
 }
+
+interface UserProfileResponse {
+	user: {
+		id: string;
+		email: string;
+		firstName?: string;
+		lastName?: string;
+		avatar?: string;
+		phoneNumber?: number;
+		role: UserRoleResponse;
+		branch?: ListBranchesResponse;
+	};
+}
+const formatProfileResponse = (user: UserProfileResponse): User => {
+	const formattedUser: User = {
+		id: user.user.id,
+		email: user.user.email,
+		firstName: user.user.firstName,
+		lastName: user.user.lastName,
+		avatar: user.user.avatar,
+		phoneNumber: user.user.phoneNumber,
+		role: user.user.role,
+		branch: user.user.branch,
+	};
+	return formattedUser;
+};
 
 export interface ResetPasswordRequest {
 	email: string;
@@ -159,7 +186,7 @@ export const userProfile = async (): Promise<User> => {
 		},
 	};
 
-	const response = axios
+	const user = axios
 		.get(`${baseAPIURL}/user/me`, AuthHeader)
 		.then(function (response) {
 			return response.data;
@@ -168,7 +195,7 @@ export const userProfile = async (): Promise<User> => {
 			console.log(error);
 			throw error;
 		});
-	return await response;
+	return formatProfileResponse(await user);
 };
 
 export const updateUserProfile = async (
