@@ -6,7 +6,7 @@ export interface AddInventoryItemRequest {
 	itemId: string;
 	quantity: string;
 	availableQuantity: string;
-	status: string;
+	// status: string;
 	expireDate: string;
 }
 
@@ -63,7 +63,7 @@ export const listInventroyItems = async (): Promise<InventoryItem[]> => {
 	const response = axios
 		.get(`${baseAPIURL}/inventory/item/list`, AuthHeader)
 		.then(function (response) {
-			return response.data.itemList;
+			return response.data.inventoryItemList;
 		})
 		.catch(function (error) {
 			console.log(error);

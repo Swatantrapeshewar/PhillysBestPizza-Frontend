@@ -52,7 +52,7 @@ const style = {
 interface InventoryItemDataState {
 	quantity: string;
 	availableQuantity: string;
-	status: string;
+	// status: string;
 	expireDate: string;
 	item: string;
 }
@@ -85,16 +85,16 @@ interface AddItemProps {
 	toBeEditedItemDetails: InventoryItem | null;
 }
 
-const StatusType = [
-	{
-		id: 'inStock',
-		name: 'In Stock',
-	},
-	{
-		id: 'consumed',
-		name: 'Consumed',
-	},
-];
+// const StatusType = [
+// 	{
+// 		id: 'InStock',
+// 		name: 'In Stock',
+// 	},
+// 	{
+// 		id: 'consumed',
+// 		name: 'Consumed',
+// 	},
+// ];
 
 const AddInventoryItem = (props: AddItemProps): React.JSX.Element => {
 	const dispatch = useAppDispatch();
@@ -122,7 +122,7 @@ const AddInventoryItem = (props: AddItemProps): React.JSX.Element => {
 				quantity: toBeEditedItemDetails.quantity ?? '',
 				availableQuantity:
 					toBeEditedItemDetails.availableQuantity ?? '',
-				status: toBeEditedItemDetails.status ?? 'Select Status',
+				// status: toBeEditedItemDetails.status ?? '',
 				expireDate: toBeEditedItemDetails.expireDate ?? '',
 			});
 			setDate(dayjs(toBeEditedItemDetails.expireDate));
@@ -144,10 +144,10 @@ const AddInventoryItem = (props: AddItemProps): React.JSX.Element => {
 			toast.error('Please Enter Available Quantity');
 			return false;
 		}
-		if (itemDetails.status === 'Select Status') {
-			toast.error('Please Select Status');
-			return false;
-		}
+		// if (itemDetails.status === 'Select Status') {
+		// 	toast.error('Please Select Status');
+		// 	return false;
+		// }
 		if (checkNullUndefiend(itemDetails.expireDate.trim())) {
 			toast.error('Please Enter Expire Date');
 			return false;
@@ -171,7 +171,7 @@ const AddInventoryItem = (props: AddItemProps): React.JSX.Element => {
 			itemId: itemDetails.item,
 			quantity: itemDetails.quantity,
 			availableQuantity: itemDetails.availableQuantity,
-			status: itemDetails.status,
+			// status: itemDetails.status,
 			expireDate: itemDetails.expireDate,
 		};
 
@@ -192,7 +192,7 @@ const AddInventoryItem = (props: AddItemProps): React.JSX.Element => {
 			itemId: itemDetails.item,
 			quantity: itemDetails.quantity,
 			availableQuantity: itemDetails.availableQuantity,
-			status: itemDetails.status,
+			// status: itemDetails.status,
 			expireDate: itemDetails.expireDate,
 		};
 
@@ -308,7 +308,7 @@ const AddInventoryItem = (props: AddItemProps): React.JSX.Element => {
 									}}
 								/>
 							</Box>
-							<Box
+							{/* <Box
 								sx={{
 									display: 'flex',
 									justifyContent: 'space-between',
@@ -344,7 +344,7 @@ const AddInventoryItem = (props: AddItemProps): React.JSX.Element => {
 										</MenuItem>
 									))}
 								</Select>
-							</Box>
+							</Box> */}
 							<Box
 								sx={{
 									display: 'flex',

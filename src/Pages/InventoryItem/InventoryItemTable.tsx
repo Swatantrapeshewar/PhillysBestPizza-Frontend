@@ -25,6 +25,7 @@ import {
 	fetchInventoryItems,
 } from '../../Services/Reducers/InventoryItemReducer';
 import { type InventoryItem } from '../../Services/APIs/InventoryItemAPI';
+import { fetchItems } from 'src/Services/Reducers/ItemReducer';
 
 // Utils
 import { isAPIActionRejected } from '../../Utils/helper';
@@ -73,6 +74,7 @@ export default function StickyHeadTable(): React.JSX.Element {
 
 	useEffect(() => {
 		void getInventoryItems();
+		void getItems();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [dispatch]);
 
@@ -87,6 +89,10 @@ export default function StickyHeadTable(): React.JSX.Element {
 
 	async function getInventoryItems(): Promise<void> {
 		await dispatch(fetchInventoryItems());
+	}
+
+	async function getItems(): Promise<void> {
+		await dispatch(fetchItems());
 	}
 
 	const handleChangePage = (event: unknown, newPage: number): void => {
