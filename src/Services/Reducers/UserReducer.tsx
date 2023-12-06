@@ -29,7 +29,7 @@ export interface User {
 	avatar: string | undefined;
 	phoneNumber: number | undefined;
 	role: UserRoleResponse;
-	branch: ListBranchesResponse;
+	branch?: ListBranchesResponse;
 }
 
 export interface UserState {
