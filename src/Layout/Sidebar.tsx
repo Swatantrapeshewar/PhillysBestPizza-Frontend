@@ -7,7 +7,7 @@ import {
 	ListItemIcon,
 	ListItemText,
 } from '@mui/material';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { styled, useTheme } from '@mui/material/styles';
@@ -89,6 +89,17 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
 	const { pathname } = location;
 	const { open } = props;
 
+	const [userDetails, setUserDetails] = useState({});
+
+	useEffect(() => {
+		const storedUserInfo: string | null =
+			localStorage.getItem('PhillyUser');
+		if (storedUserInfo != null) {
+			const userInfo = JSON.parse(storedUserInfo);
+
+			setUserDetails(userInfo);
+		}
+	}, []);
 	const handleDrawerClick = (): void => {
 		navigate('/');
 	};
@@ -115,51 +126,66 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
 			</DrawerHeader>
 
 			<List>
-				{sideBarMenuItems.map((sidebarItem) => (
-					<ListItem
-						key={sidebarItem.name}
-						disablePadding
-						sx={{
-							display: 'block',
-							color:
-								sidebarItem.route === pathname
-									? '#DC442E'
-									: '#5C5C5C',
-						}}
-						onClick={() => {
-							navigate(sidebarItem.route);
-						}}>
-						<ListItemButton
-							sx={{
-								minHeight: 48,
-								justifyContent: open ? 'initial' : 'center',
-								px: 2.5,
-							}}>
-							<ListItemIcon
+				{sideBarMenuItems.map((sidebarItem) => {
+					if (
+						(sidebarItem.name === 'Invite Users' &&
+							userDetails?.user?.user.role?.roleName ===
+								'manager') ||
+						(sidebarItem.name === 'Manage Stores' &&
+							userDetails?.user?.user.role?.roleName ===
+								'manager')
+					) {
+						return '';
+					} else {
+						return (
+							<ListItem
+								key={sidebarItem.name}
+								disablePadding
 								sx={{
-									minWidth: 0,
-									mr: open ? 3 : 'auto',
-									justifyContent: 'center',
-									stroke:
-										sidebarItem.route === pathname
-											? '#DC442E'
-											: '#5C5C5C',
+									display: 'block',
 									color:
 										sidebarItem.route === pathname
 											? '#DC442E'
 											: '#5C5C5C',
+								}}
+								onClick={() => {
+									navigate(sidebarItem.route);
 								}}>
-								{sidebarItem.icon}
-							</ListItemIcon>
-							{open && (
-								<ListItemText
-									primary={sidebarItem.name}
-									sx={{ opacity: open ? 1 : 0 }}
-								/>
-							)}
-						</ListItemButton>
-					</ListItem>
-				))}
+								<ListItemButton
+									sx={{
+										minHeight: 48,
+										justifyContent: open
+											? 'initial'
+											: 'center',
+										px: 2.5,
+									}}>
+									<ListItemIcon
+										sx={{
+											minWidth: 0,
+											mr: open ? 3 : 'auto',
+											justifyContent: 'center',
+											stroke:
+												sidebarItem.route === pathname
+													? '#DC442E'
+													: '#5C5C5C',
+											color:
+												sidebarItem.route === pathname
+													? '#DC442E'
+													: '#5C5C5C',
+										}}>
+										{sidebarItem.icon}
+									</ListItemIcon>
+									{open && (
+										<ListItemText
+											primary={sidebarItem.name}
+											sx={{ opacity: open ? 1 : 0 }}
+										/>
+									)}
+								</ListItemButton>
+							</ListItem>
+						);
+					}
+				})}
 
 				<ListItem
 					key="Logout"

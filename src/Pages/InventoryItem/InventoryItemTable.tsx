@@ -156,16 +156,19 @@ export default function StickyHeadTable(): React.JSX.Element {
 												hover
 												role="checkbox"
 												tabIndex={-1}
-												key={`item-${index}-${row.id}`}>
+												key={`item-${index}-${row?.id}`}>
 												{columns.map((column) => {
 													const value =
 														row[column.id];
-													const item = row.item.name;
+													const item =
+														row?.item?.name;
 													const category =
-														row.item.category.name;
+														row.item?.category
+															?.name;
 													const addedBy =
-														row.addedBy.firstName ??
-														row.addedBy.email;
+														row.addedBy
+															?.firstName ??
+														row.addedBy?.email;
 													return (
 														<TableCell
 															key={column.id}
