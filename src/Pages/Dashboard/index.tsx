@@ -39,8 +39,6 @@ const Dashboard = (): React.JSX.Element => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	console.log(dasboardDetails, '/dasboardDetails');
-
 	return (
 		<>
 			<Box

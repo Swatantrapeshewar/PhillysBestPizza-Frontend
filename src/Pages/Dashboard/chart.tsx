@@ -10,18 +10,20 @@ export default function SimpleCharts(): React.JSX.Element {
 		0,
 	]);
 	React.useEffect(() => {
-		const newItemNames = dasboardDetails.itemsWithTotalStock.map(
-			(item) => item.itemName,
-		);
-		const newItemQuantity = dasboardDetails.itemsWithTotalStock.map(
-			(item) => Number(item.availableQuantity),
-		);
-		const newItemHealthScore = dasboardDetails.itemsWithTotalStock.map(
-			(item) => Number(item.healthScore),
-		);
-		setItemName(newItemNames);
-		setQuantity(newItemQuantity);
-		setHealthScore(newItemHealthScore);
+		if (dasboardDetails.itemsWithTotalStock.length > 0) {
+			const newItemNames = dasboardDetails.itemsWithTotalStock.map(
+				(item) => item.itemName,
+			);
+			const newItemQuantity = dasboardDetails.itemsWithTotalStock.map(
+				(item) => Number(item.availableQuantity),
+			);
+			const newItemHealthScore = dasboardDetails.itemsWithTotalStock.map(
+				(item) => Number(item.healthScore),
+			);
+			setItemName(newItemNames);
+			setQuantity(newItemQuantity);
+			setHealthScore(newItemHealthScore);
+		}
 	}, [dasboardDetails]);
 
 	return (

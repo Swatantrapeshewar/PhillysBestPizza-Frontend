@@ -11,28 +11,7 @@ const initialDashboardDetails: DashboardDetails = {
 	totalCategories: {
 		count: '0',
 	},
-	itemsWithTotalStock: [
-		{
-			itemName: '',
-			availableQuantity: '0',
-			dailyConsumption: '0',
-			dailyThreshold: '0',
-			weeklyThreshold: '0',
-			overallThreshold: '0',
-			category: '',
-			healthScore: 0,
-		},
-		{
-			itemName: '',
-			availableQuantity: '0',
-			dailyConsumption: '0',
-			dailyThreshold: '0',
-			weeklyThreshold: '0',
-			overallThreshold: '0',
-			category: '',
-			healthScore: 0,
-		},
-	],
+	itemsWithTotalStock: [],
 };
 
 export const fetcDeshboardDetails = createAsyncThunk(

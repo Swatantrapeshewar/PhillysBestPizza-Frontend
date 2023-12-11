@@ -22,10 +22,10 @@ import UpdateItem from './AddInventoryItem';
 // Services
 import {
 	deleteInventoryItemById,
-	fetchInventoryItems,
+	fetchInventoryItemsByBranch,
 } from '../../Services/Reducers/InventoryItemReducer';
 import { type InventoryItem } from '../../Services/APIs/InventoryItemAPI';
-import { fetchItems } from 'src/Services/Reducers/ItemReducer';
+import { fetchItemsByBranch } from 'src/Services/Reducers/ItemReducer';
 
 // Utils
 import { isAPIActionRejected } from '../../Utils/helper';
@@ -59,7 +59,13 @@ const columns: readonly Column[] = [
 	{ id: 'action', label: 'Action', minWidth: 100 },
 ];
 
-export default function StickyHeadTable(): React.JSX.Element {
+interface InventoryItemTableProps {
+	selectedBranch: string;
+}
+
+export default function StickyHeadTable(
+	props: InventoryItemTableProps,
+): React.JSX.Element {
 	const dispatch = useAppDispatch();
 
 	const { InventoryItems, loading } = useAppSelector(
@@ -73,10 +79,12 @@ export default function StickyHeadTable(): React.JSX.Element {
 		React.useState<InventoryItem | null>(null);
 
 	useEffect(() => {
-		void getInventoryItems();
-		void getItems();
+		if (props.selectedBranch.length > 0) {
+			void getInventoryItems();
+			void getItems();
+		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [dispatch]);
+	}, [dispatch, props.selectedBranch]);
 
 	const handleEditModalOpen = (row: InventoryItem): void => {
 		setTobeEditedItemDetails(row);
@@ -88,11 +96,11 @@ export default function StickyHeadTable(): React.JSX.Element {
 	};
 
 	async function getInventoryItems(): Promise<void> {
-		await dispatch(fetchInventoryItems());
+		await dispatch(fetchInventoryItemsByBranch(props.selectedBranch));
 	}
 
 	async function getItems(): Promise<void> {
-		await dispatch(fetchItems());
+		await dispatch(fetchItemsByBranch(props.selectedBranch));
 	}
 
 	const handleChangePage = (event: unknown, newPage: number): void => {
@@ -112,7 +120,7 @@ export default function StickyHeadTable(): React.JSX.Element {
 		const result = await dispatch(deleteInventoryItemById(itemDetails.id));
 		if (!isAPIActionRejected(result.type)) {
 			toast.success('Inventory Item details removed Successfully');
-			await dispatch(fetchInventoryItems());
+			await dispatch(fetchInventoryItemsByBranch(props.selectedBranch));
 		}
 	};
 
@@ -239,6 +247,7 @@ export default function StickyHeadTable(): React.JSX.Element {
 				open={openEditModal}
 				handleClose={handleEditModalClose}
 				toBeEditedItemDetails={tobeEditedItemDetails}
+				selectedBranch={props.selectedBranch}
 			/>
 		</>
 	);
