@@ -68,7 +68,7 @@ export default function StickyHeadTable(
 ): React.JSX.Element {
 	const dispatch = useAppDispatch();
 
-	const { InventoryItems, loading } = useAppSelector(
+	const { branchInventoryItems, loading } = useAppSelector(
 		(state) => state.inventoryItem,
 	);
 
@@ -134,7 +134,7 @@ export default function StickyHeadTable(
 					boxShadow: 'none',
 					borderRadius: '0',
 				}}>
-				{InventoryItems.length > 0 ? (
+				{branchInventoryItems.length > 0 ? (
 					<>
 						<TableContainer sx={{ maxHeight: 440 }}>
 							<Table
@@ -155,83 +155,86 @@ export default function StickyHeadTable(
 									</TableRow>
 								</TableHead>
 								<TableBody>
-									{InventoryItems.slice(
-										page * rowsPerPage,
-										page * rowsPerPage + rowsPerPage,
-									).map((row, index) => {
-										return (
-											<TableRow
-												hover
-												role="checkbox"
-												tabIndex={-1}
-												key={`item-${index}-${row?.id}`}>
-												{columns.map((column) => {
-													const value =
-														row[column.id];
-													const item =
-														row?.item?.name;
-													const category =
-														row.item?.category
-															?.name;
-													const addedBy =
-														row.addedBy
-															?.firstName ??
-														row.addedBy?.email;
-													return (
-														<TableCell
-															key={column.id}
-															align={
-																column.align
-															}>
-															{column.id ===
-																'category' &&
-																category}
-															{column.id ===
-																'name' && item}
-															{column.id ===
-																'addedBy' &&
-																addedBy}
-															{column.id ===
-																'action' && (
-																<>
-																	<Button
-																		onClick={() => {
-																			handleEditModalOpen(
-																				row,
-																			);
-																		}}>
-																		Edit
-																	</Button>
-																	<Button
-																		onClick={() => {
-																			void handleItemDelete(
-																				row,
-																			);
-																		}}>
-																		Delete
-																	</Button>
-																</>
-															)}
-															{column.id !==
-																'category' &&
-																column.id !==
+									{branchInventoryItems
+										.slice(
+											page * rowsPerPage,
+											page * rowsPerPage + rowsPerPage,
+										)
+										.map((row, index) => {
+											return (
+												<TableRow
+													hover
+													role="checkbox"
+													tabIndex={-1}
+													key={`item-${index}-${row?.id}`}>
+													{columns.map((column) => {
+														const value =
+															row[column.id];
+														const item =
+															row?.item?.name;
+														const category =
+															row.item?.category
+																?.name;
+														const addedBy =
+															row.addedBy
+																?.firstName ??
+															row.addedBy?.email;
+														return (
+															<TableCell
+																key={column.id}
+																align={
+																	column.align
+																}>
+																{column.id ===
+																	'category' &&
+																	category}
+																{column.id ===
 																	'name' &&
-																column.id !==
+																	item}
+																{column.id ===
 																	'addedBy' &&
-																value?.toString()}
-														</TableCell>
-													);
-												})}
-											</TableRow>
-										);
-									})}
+																	addedBy}
+																{column.id ===
+																	'action' && (
+																	<>
+																		<Button
+																			onClick={() => {
+																				handleEditModalOpen(
+																					row,
+																				);
+																			}}>
+																			Edit
+																		</Button>
+																		<Button
+																			onClick={() => {
+																				void handleItemDelete(
+																					row,
+																				);
+																			}}>
+																			Delete
+																		</Button>
+																	</>
+																)}
+																{column.id !==
+																	'category' &&
+																	column.id !==
+																		'name' &&
+																	column.id !==
+																		'addedBy' &&
+																	value?.toString()}
+															</TableCell>
+														);
+													})}
+												</TableRow>
+											);
+										})}
 								</TableBody>
 							</Table>
 						</TableContainer>
 						<TablePagination
 							rowsPerPageOptions={[10, 25, 100]}
 							component="div"
-							count={InventoryItems.length}
+							count={branchInventoryItems.length}
 							rowsPerPage={rowsPerPage}
 							page={page}
 							onPageChange={handleChangePage}

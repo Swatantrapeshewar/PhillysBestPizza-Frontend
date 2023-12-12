@@ -138,7 +138,11 @@ export const listInventoryItemsByBranch = async (
 			AuthHeader,
 		)
 		.then(function (response) {
-			return response.data.itemList;
+			console.log(
+				' response.data.inventoryItemsList',
+				response.data.inventoryItemsList,
+			);
+			return response.data.inventoryItemsList;
 		})
 		.catch(function (error) {
 			console.log(error);

@@ -27,7 +27,7 @@ export interface ListItemResponse {
 	updatedAt?: string;
 	action?: string;
 	category: ListCategoryResponse;
-	branchId: ListBranchesResponse;
+	branch: ListBranchesResponse;
 }
 
 export interface UpdateItemRequestBodyParams {
