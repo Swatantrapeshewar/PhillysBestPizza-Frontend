@@ -10,6 +10,13 @@ export interface DashboardDetails {
 	totalCategories: {
 		count: string;
 	};
+	totalQuantity: {
+		totalAvailableQuantity: string;
+	};
+	totalWastedItems: {
+		count: string;
+	};
+	lowStocks: unknown[];
 	itemsWithTotalStock: ItemWithTotalStock[];
 }
 
@@ -28,14 +35,16 @@ export interface DashboardResponse {
 	dasboardDetails: DashboardDetails;
 }
 
-export const getDeshboardDetails = async (): Promise<DashboardDetails> => {
+export const getDeshboardDetails = async (
+	branchId: string,
+): Promise<DashboardDetails> => {
 	const AuthHeader = {
 		headers: {
 			Authorization: `${getAccessToken()}`,
 		},
 	};
 	const response = axios
-		.get(`${baseAPIURL}/dashboard/getDetails`, AuthHeader)
+		.get(`${baseAPIURL}/dashboard/getDetails/${branchId}`, AuthHeader)
 		.then(function (response) {
 			return response.data.dasboardDetails;
 		})

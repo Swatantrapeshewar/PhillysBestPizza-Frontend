@@ -96,7 +96,7 @@ const InvetoryItem = (): React.JSX.Element => {
 									variant="contained"
 									size="large"
 									onClick={handleOpen}>
-									Add Inventory Item
+									Add Order
 								</Button>
 							</Container>
 						</Grid>

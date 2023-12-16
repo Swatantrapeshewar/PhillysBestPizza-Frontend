@@ -68,7 +68,7 @@ export const deleteInventoryItemById = createAsyncThunk(
 );
 
 export const fetchInventoryItemsByBranch = createAsyncThunk(
-	'item/fetchItemsByBranch',
+	'item/fetchInventoryItemsByBranch',
 	async (branchId: string) => {
 		try {
 			const response = await listInventoryItemsByBranch(branchId);
@@ -155,6 +155,7 @@ const inventoryItemSlice = createSlice({
 			})
 			.addCase(fetchInventoryItemsByBranch.fulfilled, (state, action) => {
 				state.loading = false;
+				console.log('action.payload', action.payload);
 				state.branchInventoryItems = action.payload;
 			})
 			.addCase(fetchInventoryItemsByBranch.rejected, (state, action) => {

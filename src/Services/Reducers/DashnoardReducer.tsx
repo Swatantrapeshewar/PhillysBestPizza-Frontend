@@ -11,14 +11,21 @@ const initialDashboardDetails: DashboardDetails = {
 	totalCategories: {
 		count: '0',
 	},
+	totalQuantity: {
+		totalAvailableQuantity: '0',
+	},
+	totalWastedItems: {
+		count: '0',
+	},
+	lowStocks: [],
 	itemsWithTotalStock: [],
 };
 
 export const fetcDeshboardDetails = createAsyncThunk(
 	'dashboard/fetcDeshboardDetails',
-	async () => {
+	async (branchId: string) => {
 		try {
-			const response = await getDeshboardDetails();
+			const response = await getDeshboardDetails(branchId);
 			return response;
 		} catch (error) {
 			console.error(error);
