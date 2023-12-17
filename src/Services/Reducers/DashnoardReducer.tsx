@@ -17,8 +17,10 @@ const initialDashboardDetails: DashboardDetails = {
 	totalWastedItems: {
 		count: '0',
 	},
+	recentOrders: [],
 	lowStocks: [],
 	itemsWithTotalStock: [],
+	wastedItemsList: [],
 };
 
 export const fetcDeshboardDetails = createAsyncThunk(

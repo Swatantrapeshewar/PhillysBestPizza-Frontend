@@ -16,8 +16,45 @@ export interface DashboardDetails {
 	totalWastedItems: {
 		count: string;
 	};
-	lowStocks: unknown[];
+	recentOrders: StockItem[];
+	lowStocks: StockItem[];
 	itemsWithTotalStock: ItemWithTotalStock[];
+	wastedItemsList: wastedItem[];
+}
+
+interface StockItem {
+	id: string;
+	quantity: string;
+	availableQuantity: string;
+	status: string;
+	expireDate: string;
+	addedAt: string;
+	updatedAt: string;
+	item: StockItemItem;
+	branch: StockItemBranch;
+	addedBy: StockItemUser;
+}
+
+interface StockItemItem {
+	id: string;
+	name: string;
+}
+
+interface StockItemBranch {
+	id: string;
+	storeName: string;
+}
+
+interface StockItemUser {
+	id: string;
+	email: string;
+	firstName: string;
+	lastName: string | null;
+}
+
+interface wastedItem {
+	itemName: string;
+	wastedQuantity: string;
 }
 
 interface ItemWithTotalStock {

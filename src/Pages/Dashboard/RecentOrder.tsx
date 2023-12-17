@@ -7,51 +7,36 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import { Typography } from '@mui/material';
 import { useAppSelector } from '../../Hooks/reduxHooks';
-// {
-//     "id": "39a8341d-ab6d-42fb-b516-8ceeb8a42a47",
-//     "quantity": "150",
-//     "availableQuantity": "50",
-//     "status": "InStock",
-//     "expireDate": "2023-12-13T18:30:00.000Z",
-//     "addedAt": "2023-12-16T16:46:32.609Z",
-//     "updatedAt": "2023-12-16T17:00:18.000Z",
-//     "branch": {
-//         "id": "79dda954-b86f-4082-82fd-aa2bbc812ce2",
-//         "storeName": "Pizza puff"
-//     },
-//     "addedBy": {
-//         "id": "1",
-//         "email": "aman@o2h.com",
-//         "firstName": "Aman",
-//         "lastName": null
-//     }
-// }
+
+//     "id": "39a8341d-ab6d-42fb-b516-8ceeb8a42a47
+
 interface Column {
 	id:
-		| 'itemName'
-		| 'category'
-		| 'weeklyThreshold'
-		| 'overallThreshold'
-		| 'dailyThreshold'
-		| 'dailyConsumption';
+		| 'item'
+		// | 'category'
+		| 'quantity'
+		| 'availableQuantity'
+		| 'expireDate'
+		| 'status'
+		| 'addedBy';
 	label: string;
 	minWidth?: number;
 	align?: 'right';
-	format?: (value: number | null) => string;
+	format?: (value: number) => string;
 }
 
 const columns: readonly Column[] = [
-	{ id: 'itemName', label: 'Item', minWidth: 100 },
-	{ id: 'category', label: 'Category', minWidth: 80 },
-	{ id: 'dailyConsumption', label: 'Daily Consumption', minWidth: 60 },
-	{ id: 'dailyThreshold', label: 'Daily Threshold', minWidth: 60 },
-	{ id: 'weeklyThreshold', label: 'Weekly Threshold', minWidth: 60 },
-	{ id: 'overallThreshold', label: 'Overall Threshold', minWidth: 60 },
+	{ id: 'item', label: 'Items', minWidth: 90 },
+	// { id: 'category', label: 'Category', minWidth: 100 },
+	{ id: 'quantity', label: 'Quantity', minWidth: 90 },
+	{ id: 'availableQuantity', label: 'Available Quantity', minWidth: 90 },
+	{ id: 'expireDate', label: 'Expire Date', minWidth: 90 },
+	{ id: 'status', label: 'Status', minWidth: 90 },
+	{ id: 'addedBy', label: 'Added By', minWidth: 90 },
 ];
 
-export default function StickyHeadTable(): React.JSX.Element {
+export default function RecentOrder(): React.JSX.Element {
 	const { dasboardDetails } = useAppSelector((state) => state.dashboard);
 	const [page, setPage] = React.useState(0);
 	const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -69,16 +54,8 @@ export default function StickyHeadTable(): React.JSX.Element {
 
 	return (
 		<>
-			<Typography
-				component="h2"
-				variant="h6"
-				color="primary"
-				gutterBottom>
-				Manage Item
-			</Typography>
-
 			<Paper sx={{ width: '100%', overflow: 'hidden' }}>
-				<TableContainer sx={{ maxHeight: 310 }}>
+				<TableContainer sx={{ maxHeight: 440 }}>
 					<Table stickyHeader aria-label="sticky table">
 						<TableHead>
 							<TableRow>
@@ -93,7 +70,7 @@ export default function StickyHeadTable(): React.JSX.Element {
 							</TableRow>
 						</TableHead>
 						<TableBody>
-							{dasboardDetails.itemsWithTotalStock
+							{dasboardDetails.recentOrders
 								.slice(
 									page * rowsPerPage,
 									page * rowsPerPage + rowsPerPage,
@@ -104,21 +81,29 @@ export default function StickyHeadTable(): React.JSX.Element {
 											hover
 											role="checkbox"
 											tabIndex={-1}
-											key={`item-${index}-${row.itemName}`}>
+											key={`item-${index}-${row.item.id}`}>
 											{columns.map((column) => {
-												const value = row[column.id];
+												const value = row[
+													column.id
+												] as string;
+												const item = row?.item?.name;
+												const addedBy =
+													row.addedBy?.firstName ??
+													row.addedBy?.email;
 												return (
 													<TableCell
 														key={column.id}
 														align={column.align}>
-														{column.format !=
-															null &&
-														typeof value ===
-															'number'
-															? column.format(
-																	value,
-															  )
-															: value}
+														{column.id === 'item' &&
+															item}
+														{column.id ===
+															'addedBy' &&
+															addedBy}
+
+														{column.id !== 'item' &&
+															column.id !==
+																'addedBy' &&
+															value?.toString()}
 													</TableCell>
 												);
 											})}
@@ -131,7 +116,7 @@ export default function StickyHeadTable(): React.JSX.Element {
 				<TablePagination
 					rowsPerPageOptions={[10, 25, 100]}
 					component="div"
-					count={dasboardDetails.itemsWithTotalStock.length}
+					count={dasboardDetails.recentOrders.length}
 					rowsPerPage={rowsPerPage}
 					page={page}
 					onPageChange={handleChangePage}

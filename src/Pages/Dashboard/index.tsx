@@ -23,6 +23,9 @@ import { fetcDeshboardDetails } from '../../Services/Reducers/DashnoardReducer';
 import { fetchBranches } from '../../Services/Reducers/BranchReducer';
 
 import Loader from '../../Layout/Loader';
+import WastedItem from './wastedItem';
+import LowStocks from './LowStocks';
+import RecentOrder from './RecentOrder';
 
 const Dashboard = (): React.JSX.Element => {
 	const navigate = useNavigate();
@@ -116,7 +119,7 @@ const Dashboard = (): React.JSX.Element => {
 						</FormControl>
 					</Box>
 
-					<Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+					<Container maxWidth="lg" sx={{ mt: 4, mb: 4 }} key={branch}>
 						<Grid container spacing={3}>
 							{/* Chart */}
 							<Grid item xs={12} md={4} lg={3}>
@@ -225,7 +228,7 @@ const Dashboard = (): React.JSX.Element => {
 								style={{ maxWidth: '50%' }}>
 								<ManageItems />
 							</Grid> */}
-							<Grid item xs={12}>
+							<Grid item xs={6}>
 								<Paper
 									sx={{
 										p: 2,
@@ -240,7 +243,61 @@ const Dashboard = (): React.JSX.Element => {
 										Items & Quantity & Health Score
 									</Typography>
 									{/* <Orders /> */}
-									<ItemsCharts />
+									<ItemsCharts
+										dasboardDetails={dasboardDetails}
+										branch={branch}
+									/>
+								</Paper>
+							</Grid>
+							<Grid item xs={6}>
+								<Paper
+									sx={{
+										p: 2,
+										display: 'flex',
+										flexDirection: 'column',
+									}}>
+									<Typography
+										component="h2"
+										variant="h6"
+										color="primary"
+										gutterBottom>
+										Wasted Item
+									</Typography>
+									<WastedItem branch={branch} />
+								</Paper>
+							</Grid>
+							<Grid item xs={6}>
+								<Paper
+									sx={{
+										p: 2,
+										display: 'flex',
+										flexDirection: 'column',
+									}}>
+									<Typography
+										component="h2"
+										variant="h6"
+										color="primary"
+										gutterBottom>
+										Recent Oders
+									</Typography>
+									<RecentOrder />
+								</Paper>
+							</Grid>
+							<Grid item xs={6}>
+								<Paper
+									sx={{
+										p: 2,
+										display: 'flex',
+										flexDirection: 'column',
+									}}>
+									<Typography
+										component="h2"
+										variant="h6"
+										color="primary"
+										gutterBottom>
+										Low Stock
+									</Typography>
+									<LowStocks />
 								</Paper>
 							</Grid>
 						</Grid>
